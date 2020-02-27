@@ -4,6 +4,8 @@
         <NavigationBar/>
         <LeftSideMenu/>
         <v-content>
+            <router-view></router-view>
+
           <v-container
                   class="fill-height"
                   fluid
