@@ -5,11 +5,6 @@ import * as mutations from './mutations'
 
 
 
-
-
-
-
-
 Vue.use(Vuex)
 
 const store = new Vuex.Store({
@@ -21,7 +16,6 @@ const store = new Vuex.Store({
     state: {
         user: null,
         // emptyAvatar: require('@/assets/empty-avatar.png'),
-
         // first: null,
         langList: [
             {
