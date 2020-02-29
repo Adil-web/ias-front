@@ -15,6 +15,7 @@ const store = new Vuex.Store({
     },
     state: {
         user: null,
+        isAuthenticated:false,
         // emptyAvatar: require('@/assets/empty-avatar.png'),
         // first: null,
         langList: [
@@ -38,6 +39,11 @@ const store = new Vuex.Store({
         // },
     },
 
+    // actions: {
+    //     increment(context) {
+    //         context.commit('increment');
+    //     }
+    // }
 });
 
 export default store

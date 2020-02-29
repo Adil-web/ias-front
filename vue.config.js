@@ -3,7 +3,7 @@ module.exports = {
     // contentBase: path.join(__dirname, 'public'),
     compress: true,
     open: true,
-    port: 8090
+    port: 8080
     // ,
     //
     // proxy: {
