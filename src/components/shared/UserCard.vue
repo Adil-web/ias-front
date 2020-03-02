@@ -31,12 +31,8 @@
                         align="center"
                         justify="end"
                 >
-                    mdi-location-exit
-                    <v-icon class="mr-1">mdi-heart</v-icon>
-                    <span class="subheading mr-2">256</span>
-                    <span class="mr-1">·</span>
-                    <v-icon class="mr-1">mdi-share-variant</v-icon>
-                    <span class="subheading">45</span>
+
+                    <v-icon @click="closeCard" class="mr-1">mdi-location-exit</v-icon>
                 </v-row>
             </v-list-item>
         </v-card-actions>
@@ -45,7 +41,12 @@
 
 <script>
     export default {
-        name: "UserCard"
+        name: "UserCard",
+        methods:{
+            closeCard(){
+                this.$emit('close-user-card')
+            }
+        }
     }
 </script>
 
