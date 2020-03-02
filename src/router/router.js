@@ -12,19 +12,35 @@ Vue.use(VueRouter);
 
 
 
-export default new VueRouter({
+const router =  new VueRouter({
     mode: 'history',
     routes: [
         { path: '/main', name:'main', component: MainLayout, children:[
                 {
-                    path: '/home', name:'home', component: Home
+                    path: 'home', name:'home', component: Home
                 }
             ]
         },
-        { path: '/', name:'login', component: Login},
+        { path: '/login', name:'login', component: Login},
 
     ]
+
+
 });
+
+
+router.beforeEach((to, from, next) => {
+    const publicPages = ['/login'];
+    const authRequired = !publicPages.includes(to.path);
+    const loggedIn = sessionStorage.getItem('user-token');
+    if (authRequired && !loggedIn) {
+        next('/login');
+    } else {
+        next();
+    }
+});
+
+export default router;
 
 
 

@@ -37,11 +37,10 @@
         methods:{
             submit(){
                this.$store.dispatch('loginAction',{username:this.username, password:this.password})
-                   .then(response=>{
-                   console.log(response)
-                   this.$router.push('home')
-               }).catch(error=>{
-                   console.log(error)
+                   .then(()=>{
+                   this.$router.push('/main/home')
+                }).catch(error=>{
+                    console.log(error)
                })
 
 

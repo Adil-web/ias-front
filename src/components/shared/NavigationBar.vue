@@ -20,7 +20,7 @@
             <v-btn icon>
                 <v-icon>mdi-bell</v-icon>
             </v-btn>
-            <v-btn icon>
+            <v-btn icon @click="logout">
                 <v-icon>mdi-logout</v-icon>
             </v-btn>
         </v-app-bar>
@@ -29,6 +29,8 @@
 </template>
 
 <script>
+    import {mapMutations} from "vuex";
+
     export default {
         name: "NavigationBar",
         computed:{
@@ -40,6 +42,21 @@
                     return this.$store.state.drawer = val
                 }
             },
+
+
+        },
+
+
+        methods:{
+            ...mapMutations([
+                'logoutMutation'
+            ]),
+
+
+            logout(){
+                this.logoutMutation();
+                this.$router.push('/login')
+            }
         }
 
 
