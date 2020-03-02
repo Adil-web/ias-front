@@ -1,4 +1,4 @@
-# nurbek
+# ias-front
 
 ## Project setup
 ```
