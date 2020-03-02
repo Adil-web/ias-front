@@ -6,8 +6,8 @@
                 <v-btn dark icon class="mr-4">
                     <v-icon>mdi-pencil</v-icon>
                 </v-btn>
-                <v-btn dark icon>
-                    <v-icon @click="closeCard" class="mr-1">mdi-location-exit</v-icon>
+                <v-btn dark icon @click="closeCard">
+                    <v-icon  class="mr-1">mdi-location-exit</v-icon>
                 </v-btn>
             </v-row>
         </v-card-title>
@@ -86,7 +86,7 @@
             closeCard(){
                 this.$emit('close-user-card')
             }
-        }
+        },
     }
 </script>
 
