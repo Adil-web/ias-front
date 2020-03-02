@@ -36,7 +36,7 @@
             </v-btn>
 
 
-            <v-dialog v-if="profile" v-model="profile" persistent max-width="400px">
+            <v-dialog v-if="profile" v-model="profile" persistent width="700">
                 <user-card v-on:close-user-card="openCloseProfile"></user-card>
             </v-dialog>
         </v-app-bar>
@@ -50,7 +50,9 @@
 
     export default {
         name: "NavigationBar",
-        components:{UserCard},
+        components:{
+            UserCard
+        },
 
         data:()=>({
            profile:false,
