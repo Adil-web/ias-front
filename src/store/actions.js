@@ -8,9 +8,8 @@ export const loginAction= ({commit},user)=>{
                     commit('loginSuccessMutation',response.data)
                     resolve(response);
                 }
-            }).catch(()=>{
-                // console.log(error)
-                reject({'ОщибкаНурбека':'ДА'})
+            }).catch((er)=>{
+                reject(er);
         })
     })
 }

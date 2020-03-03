@@ -11,13 +11,14 @@
                     <v-card-text>
                         <v-form>
                             <v-text-field  prepend-icon="mdi-logout" name="login" label="Login" type="text" v-model="username"></v-text-field>
-                            <v-text-field id="password" prepend-icon="mdi-bell" name="password" label="Password" type="password" v-model="password"></v-text-field>
+                            <v-text-field id="password" prepend-icon="mdi-security" name="password" label="Password" type="password" v-model="password"></v-text-field>
                         </v-form>
                     </v-card-text>
                     <v-card-actions>
                         <v-spacer></v-spacer>
                         <v-btn color="primary" v-on:click="submit">Login</v-btn>
                     </v-card-actions>
+                    <v-alert v-if="errorMessage"  dense type="error">{{errorMessage}}</v-alert>
                 </v-card>
             </v-flex>
         </v-layout>
@@ -31,7 +32,8 @@
         name: "Login",
         data:()=>({
             username:'',
-            password:''
+            password:'',
+            errorMessage:null
     }),
 
         methods:{
@@ -39,8 +41,8 @@
                this.$store.dispatch('loginAction',{username:this.username, password:this.password})
                    .then(()=>{
                    this.$router.push('/main/home')
-                }).catch(error=>{
-                    console.log(error)
+                }).catch(er=>{
+                    this.errorMessage=er.response.data.message;
                })
 
 
