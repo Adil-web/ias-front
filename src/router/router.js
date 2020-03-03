@@ -4,6 +4,7 @@ import Home from '@/views/Home';
 
 import Vue from 'vue';
 import MainLayout from "../components/shared/MainLayout";
+import AdminLayout from "../components/admin/AdminLayout";
 
 Vue.use(VueRouter);
 
@@ -22,6 +23,7 @@ const router =  new VueRouter({
             ]
         },
         { path: '/login', name:'login', component: Login},
+        { path: '/admin', name:'admin', component: AdminLayout}
 
     ]
 
