@@ -28,25 +28,57 @@
 </template>
 
 <script>
+    import {mapMutations} from "vuex";
+
     export default {
         name: "Login",
         data:()=>({
             username:'',
             password:'',
-            errorMessage:null
+            errorMessage:null,
+            rolesRoutes: {
+                'ROLE_USER': '/main/home',
+                'ROLE_ADMIN':'/admin'
+            }
     }),
 
         methods:{
             submit(){
                this.$store.dispatch('loginAction',{username:this.username, password:this.password})
                    .then(()=>{
-                   this.$router.push('/main/home')
+                      this.routeTo(this.rolesRoutes[this.user.roles[0]]);
                 }).catch(er=>{
                     this.errorMessage=er.response.data.message;
                })
 
 
+            },
+
+            routeTo(route){
+                this.$router.push(route);
+
+            },
+
+            ...mapMutations([
+                'logoutMutation'
+            ]),
+
+            logout(){
+                this.logoutMutation();
+            },
+        },
+
+
+        computed:{
+            user:{
+                get(){
+                    return  this.$store.state.user;
+                }
             }
+        },
+        created() {
+            this.logout();
+
         }
     }
 </script>

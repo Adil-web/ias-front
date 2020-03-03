@@ -1,12 +1,25 @@
 <template>
+    <v-app>
+        <AdminNavigationBar/>
+        <AdminLeftSideMenu/>
+        <v-content>
+            <v-container class="fill-height" fluid>
+                <v-row align="center" justify="center">
+                    <router-view></router-view>
+                </v-row>
+            </v-container>
+        </v-content>
+    </v-app>
 
-    <h2> Admin Layout</h2>
-    
 </template>
 
 <script>
+    import AdminNavigationBar from "./AdminNavigationBar";
+    import AdminLeftSideMenu from "./AdminLeftSideMenu";
+
     export default {
-        name: "admin.vue"
+        name: "AdminMainLayout",
+        components: { AdminNavigationBar, AdminLeftSideMenu}
     }
 </script>
 
