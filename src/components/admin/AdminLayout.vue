@@ -13,6 +13,7 @@
 
 </template>
 
+
 <script>
     import AdminNavigationBar from "./AdminNavigationBar";
     import AdminLeftSideMenu from "./AdminLeftSideMenu";
