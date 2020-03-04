@@ -42,7 +42,7 @@
                 { icon: 'mdi-chart-areaspline', text: 'Мониторинг социально-экономического развития' },
                 { icon: 'mdi-currency-eur', text: 'Бюджет' },
                 { icon: 'mdi-wan', text: 'Прогноз ВРП' },
-                { icon: 'mdi-offer', text: 'Бюджетные инвестиционные проекты>' },
+                { icon: 'mdi-offer', text: 'Бюджетные инвестиционные проекты' },
                 { icon: 'mdi-school-outline', text: 'С дипломом в село' },
                 { icon: 'mdi-home-map-marker ', text: 'Моинторинг СНП' },
                 { icon: 'mdi-handshake', text: 'Государственно-частное партнерство' },
