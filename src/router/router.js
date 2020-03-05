@@ -1,10 +1,12 @@
 import VueRouter from "vue-router";
 import Login from '@/views/Login';
 import Home from '@/views/Home';
+import Users from '@/components/admin/Users';
+import Organizations from '@/components/admin/Organizations';
 
 import Vue from 'vue';
-import MainLayout from "../components/shared/MainLayout";
-import AdminLayout from "../components/admin/AdminLayout";
+import MainLayout from '@/components/shared/MainLayout';
+import AdminLayout from "@/components/admin/AdminLayout";
 
 Vue.use(VueRouter);
 
@@ -23,8 +25,17 @@ const router =  new VueRouter({
             ]
         },
         { path: '/login', name:'login', component: Login},
-        { path: '/admin', name:'admin', component: AdminLayout}
+        { path: '/admin', name:'admin', component: AdminLayout
+            , children:[
+                {
+                    path: '/users', name: 'users', component: Users
+                },
+                {
+                    path: '/organizations', name: 'organizations', component: Organizations
+                },
 
+            ]
+        },
     ]
 
 
