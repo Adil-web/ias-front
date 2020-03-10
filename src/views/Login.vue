@@ -38,7 +38,8 @@
             errorMessage:null,
             rolesRoutes: {
                 'ROLE_USER': '/main/home',
-                'ROLE_ADMIN':'/admin'
+                'ROLE_ADMIN':'/admin/users'
+                // 'ROLE_ADMIN':'/admin'
             }
     }),
 

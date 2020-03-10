@@ -41,10 +41,10 @@
 
             items: [
 
-                { icon: 'mdi-account', text: 'Пользователи', path:'/users' },
+                { icon: 'mdi-account', text: 'Пользователи', path:'/admin/users' },
 
 
-                { icon: 'mdi-bag-checked', text: 'Органицазии' ,path:'/organizations'},
+                { icon: 'mdi-bag-checked', text: 'Органицазии' ,path:'/admin/organizations'},
 
             ],
         }),
