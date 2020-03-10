@@ -46,7 +46,7 @@
             submit(){
                this.$store.dispatch('loginAction',{username:this.username, password:this.password})
                    .then(()=>{
-                      this.routeTo(this.rolesRoutes[this.user.roles[0]]);
+                      this.routeTo(this.rolesRoutes[this.user.role]);
                 }).catch(er=>{
                     this.errorMessage=er.response.data.message;
                })

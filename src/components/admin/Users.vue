@@ -157,7 +157,8 @@
                     return this.users
                 }
                 else {
-                    return this.users.filter((user)=>user.roles[0].name===this.roleType)
+                    console.log(this.users)
+                    return this.users.filter((user)=>user.role.name===this.roleType)
                 }
             }
         },
