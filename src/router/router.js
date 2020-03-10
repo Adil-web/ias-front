@@ -18,7 +18,7 @@ Vue.use(VueRouter);
 const router =  new VueRouter({
     mode: 'history',
     routes: [
-        { path: '/main', name:'main', component: MainLayout, children:[
+        { path: '/main', name:'ma   in', component: MainLayout, children:[
                 {
                     path: 'home', name:'home', component: Home
                 }
@@ -40,6 +40,8 @@ const router =  new VueRouter({
 
 
 });
+
+
 
 
 router.beforeEach((to, from, next) => {
