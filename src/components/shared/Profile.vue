@@ -81,7 +81,7 @@
 
 <script>
     export default {
-        name: "UserCard",
+        name: "Profile",
         methods:{
             closeCard(){
                 this.$emit('close-user-card')

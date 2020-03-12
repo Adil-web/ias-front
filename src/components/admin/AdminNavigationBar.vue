@@ -17,6 +17,7 @@
                 <v-icon>mdi-account-circle</v-icon>
             </v-btn>
 
+
             <v-menu offset-y open-on-hover>
                 <template v-slot:activator="{ on, attrs }">
                     <v-btn depressed v-bind="attrs" v-on="on" color="green darken-3">
@@ -37,7 +38,7 @@
 
 
             <v-dialog v-if="profile" v-model="profile" persistent width="700">
-                <user-card v-on:close-user-card="openCloseProfile"></user-card>
+                <profile v-on:close-user-card="openCloseProfile"></profile>
             </v-dialog>
         </v-app-bar>
     </v-container>
@@ -45,13 +46,13 @@
 </template>
 
 <script>
-    import UserCard from "@/components/shared/UserCard";
+    import Profile from "@/components/shared/Profile";
     import {mapMutations} from "vuex";
 
     export default {
         name: "AdminNavigationBar",
         components:{
-            UserCard
+            Profile
         },
 
         data:()=>({

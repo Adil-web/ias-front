@@ -2,6 +2,9 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import * as actions from './actions'
 import * as mutations from './mutations'
+import usersModule from './users/userStore'
+
+
 
 
 
@@ -11,7 +14,8 @@ const store = new Vuex.Store({
     actions,
     mutations,
     modules: {
-    //
+        usersModule
+
     },
     state: {
         user: null,

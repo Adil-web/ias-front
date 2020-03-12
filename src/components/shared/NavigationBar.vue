@@ -30,28 +30,28 @@
                 </v-list>
             </v-menu>
 
-
             <v-btn icon @click="logout">
                 <v-icon>mdi-logout</v-icon>
             </v-btn>
 
 
             <v-dialog v-if="profile" v-model="profile" persistent width="700">
-                <user-card v-on:close-user-card="openCloseProfile"></user-card>
+                <profile v-on:close-user-card="openCloseProfile"></profile>
             </v-dialog>
         </v-app-bar>
     </v-container>
 
 </template>
 
+
 <script>
-    import UserCard from "./UserCard";
+    import Profile from "./Profile";
     import {mapMutations} from "vuex";
 
     export default {
         name: "NavigationBar",
         components:{
-            UserCard
+            Profile
         },
 
         data:()=>({
