@@ -8,16 +8,16 @@ export const createUserMutation = (state, user) => {
 };
 
 
-export const deleteUserMutation = (state, userId) => {
-    state.
-    state.users.
-};
+// export const deleteUserMutation = (state, userId) => {
+//     state.
+//     state.users.
+// };
 
 
-
-export const usersMutation = (state, users) => {
-    state.users=users;
-};
+//
+// export const usersMutation = (state, users) => {
+//     state.users=users;
+// };
 
 
 
