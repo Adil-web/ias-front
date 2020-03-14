@@ -39,7 +39,6 @@
             rolesRoutes: {
                 'ROLE_USER': '/main/home',
                 'ROLE_ADMIN':'/admin/users'
-                // 'ROLE_ADMIN':'/admin'
             }
     }),
 
@@ -47,7 +46,7 @@
             submit(){
                this.$store.dispatch('loginAction',{username:this.username, password:this.password})
                    .then(()=>{
-                      this.routeTo(this.rolesRoutes[this.user.role]);
+                      this.routeTo(this.rolesRoutes[this.user.role.name]);
                 }).catch(er=>{
                     this.errorMessage=er.response.data.message;
                })

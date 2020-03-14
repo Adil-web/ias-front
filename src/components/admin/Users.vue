@@ -1,5 +1,6 @@
 <template>
-    <v-data-table
+    <v-data-table v-if ="users.length!==0"
+            dense
             :headers="headers"
             :items="users"
             sort-by="calories"
@@ -18,7 +19,6 @@
                     <template v-slot:activator="{ on }">
                         <v-btn color="primary" dark class="mb-2" v-on="on">New Item</v-btn>
                     </template>
-<!--                    -->
                     <v-card>
                         <v-card-title>
                             <span class="headline">{{ formTitle }}</span>
@@ -43,14 +43,13 @@
                                     </v-col>
                                     <v-col cols="12" sm="6">
                                         <v-select
-                                                v-model="user.role"
+                                                v-model="user.role_id"
                                                 hint="Роль"
                                                 :items="roles"
                                                 item-text="text"
-                                                item-value="name"
+                                                item-value="id"
                                                 label="Выбор роли"
                                                 persistent-hint
-                                                return-object
                                                 single-line
                                                 required
                                         ></v-select>
@@ -87,6 +86,7 @@
             <v-btn color="primary" @click="initialize">Reset</v-btn>
         </template>
     </v-data-table>
+    <div v-else> Ожидайте загрузка</div>
 </template>
 
 <script>
@@ -102,8 +102,9 @@
             headers: [
                 { text: 'Логин', align: 'start', sortable: false, value: 'username',},
                 { text: 'Почта', value: 'email' },
-                { text: 'Пароль', value: 'password' },
-                { text: 'Actions', value: 'actions', sortable: false },
+                { text: 'Роль', value: 'role.name' },
+                // { text: 'Пароль', value: 'password' },
+                { text: 'Действия', value: 'actions', sortable: false },
             ],
         }),
 
@@ -128,7 +129,6 @@
               user_api.getUsersApi().then(response=>{ this.users=response.data });
             },
 
-            initialize () {},
 
             editItem (userItem) {
                 this.user = Object.assign({}, userItem)
@@ -136,8 +136,19 @@
             },
 
             deleteItem (userItem) {
-                const index = this.users.indexOf(userItem)
-                confirm('Are you sure you want to delete this item?') && this.users.splice(index, 1)
+                if (confirm('Are you sure you want to delete this item?')){
+                    const index = this.users.indexOf(userItem);
+                    user_api.deleteUserApi(this.user).then((response)=>{
+                        console.log(response)
+                        this.users.splice(index,1)
+                    })
+
+                } else {
+                    console.log("нет")
+                }
+
+
+
             },
 
             close () {
@@ -147,14 +158,14 @@
 
             save () {
                 if (this.user.id === undefined) {
-                    user_api.createUserApi(this.user).then(()=>{
-                        this.users.push(this.user);
+                    user_api.createUserApi(this.user).then((response)=>{
+                        this.users.push(response.data);
                         this.close();
                     })
 
                 } else {
-                    user_api.editUserApi(this.user).then(()=>{
-                        Vue.set(this.users, this.users.findIndex(item=>item.id === this.user.id), this.user);
+                    user_api.editUserApi(this.user).then((response)=>{
+                        Vue.set(this.users, this.users.findIndex(item=>item.id === response.data.id), response.data );
                         this.close();
                     });
                 }
