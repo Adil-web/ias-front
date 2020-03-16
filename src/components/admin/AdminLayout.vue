@@ -3,10 +3,11 @@
         <AdminNavigationBar/>
         <AdminLeftSideMenu/>
         <v-content>
-            <v-container class="fill-height" fluid>
-                <v-row align="center" justify="center">
+<!--            <v-container class="fill-height" fluid>-->
+            <v-container>
+<!--                <v-row align="center" justify="center">-->
                     <router-view></router-view>
-                </v-row>
+<!--                </v-row>-->
             </v-container>
         </v-content>
     </v-app>

@@ -44,7 +44,7 @@
                 { icon: 'mdi-account', text: 'Пользователи', path:'/admin/users' },
 
 
-                { icon: 'mdi-bag-checked', text: 'Органицазии' ,path:'/admin/organizations'},
+                { icon: 'mdi-delete-variant ', text: 'Корзина' ,path:'/admin/organizations'},
 
             ],
         }),

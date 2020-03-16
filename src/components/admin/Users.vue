@@ -159,7 +159,7 @@
 
         methods: {
             getUsers(){
-              user_api.getUsersApi().then(response=>{ this.users=response.data });
+              user_api.getUsersApi(false).then(response=>{ this.users=response.data });
             },
 
 
@@ -170,7 +170,7 @@
 
             deleteItem (userItem) {
                 if (confirm('Вы уверены что хотите удалить пользователя?')){
-                    user_api.deleteUserApi(userItem.id).then(()=>{
+                    user_api.deleteUserApi(userItem.id, true).then(()=>{
                         const index = this.users.indexOf(userItem);
                         this.users.splice(index,1)
                     })
