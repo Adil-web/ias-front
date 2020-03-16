@@ -10,8 +10,8 @@ const DELETE_USER='/api/test/delete';
 
 export default {
 
-    getUsersApi(){
-        return axios.get(GET_USERS, { headers: authHeader() })
+    getUsersApi(bool){
+        return axios.get(GET_USERS+'?bool='+bool, { headers: authHeader() })
     },
 
 
@@ -24,9 +24,9 @@ export default {
     },
 
 
-    deleteUserApi(userId){
+    deleteUserApi(userId, bool){
         console.log(userId)
-        return axios.get(DELETE_USER +'?userId='+userId,{ headers: authHeader() })
+        return axios.get(DELETE_USER +'?userId='+userId+'&bool='+ bool,{ headers: authHeader() })
     }
 
 
