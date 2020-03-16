@@ -169,9 +169,12 @@
 
             deleteItem (userItem) {
                 if (confirm('Вы уверены что хотите удалить пользователя?')){
-                    user_api.deleteUserApi(userItem.id, true).then(()=>{
-                        const index = this.users.indexOf(userItem);
-                        this.users.splice(index,1)
+                    user_api.deleteUserApi(userItem.id, true)
+                        .then(()=>{
+                            const index = this.users.indexOf(userItem);
+                            this.users.splice(index,1)
+                        }).catch(er=>{
+                        alert(er.response.data.message)
                     })
                 } else {
                     console.log("Не удалось удалить пользователя")

@@ -27,6 +27,13 @@
             >
                 mdi-delete-restore
             </v-icon>
+
+            <v-icon
+                    size=20
+                    @click="removeItem(item)"
+            >
+                mdi-delete-forever
+            </v-icon>
         </template>
         <template v-slot:no-data>
             <v-btn color="primary" @click="initialize">Reset</v-btn>
@@ -87,6 +94,17 @@
             deleteItem (userItem) {
                 if (confirm('Вы уверены что хотите удалить пользователя?')){
                     user_api.recoveryUserApi(userItem.id, false).then(()=>{
+                        const index = this.users.indexOf(userItem);
+                        this.users.splice(index,1)
+                    })
+                } else {
+                    console.log("Не удалось удалить пользователя")
+                }
+            },
+
+            removeItem (userItem) {
+                if (confirm('Вы уверены что хотите удалить пользователя?')){
+                    user_api.removeUserApi(userItem.id).then(()=>{
                         const index = this.users.indexOf(userItem);
                         this.users.splice(index,1)
                     })
