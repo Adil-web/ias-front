@@ -5,15 +5,23 @@
             :items="users"
             sort-by="calories"
             class="elevation-1"
+                  :search="search"
     >
         <template v-slot:top>
             <v-toolbar flat color="white">
-                <v-toolbar-title>My CRUD</v-toolbar-title>
+<!--                <v-toolbar-title></v-toolbar-title>-->
                 <v-divider
                         class="mx-4"
                         inset
                         vertical
                 ></v-divider>
+                <v-text-field
+                        v-model="search"
+                        append-icon="mdi-magnify"
+                        label="Search"
+                        single-line
+                        hide-details
+                ></v-text-field>
                 <v-spacer></v-spacer>
                 <v-dialog v-model="dialog" max-width="500px">
                     <template v-slot:activator="{ on }">
@@ -33,6 +41,27 @@
                                                 hint="please insert legal username"
                                                 persistent-hint
                                                 required
+                                        ></v-text-field>
+                                    </v-col>
+                                    <v-col cols="12" sm="6" md="4">
+                                        <v-text-field
+                                                v-model="user.name"
+                                                label="Legal name*"
+                                                persistent-hint
+                                                required
+                                        ></v-text-field>
+                                    </v-col>
+                                    <v-col cols="12" sm="6" md="4">
+                                        <v-text-field
+                                                v-model="user.surname"
+                                                label="Legal surname*"
+                                                required
+                                        ></v-text-field>
+                                    </v-col>
+                                    <v-col cols="12" sm="6" md="4">
+                                        <v-text-field
+                                                v-model="user.patronymic"
+                                                label="Legal patronymic*"
                                         ></v-text-field>
                                     </v-col>
                                     <v-col cols="12" sm="6" md="4">
@@ -94,6 +123,7 @@
     import user_api from "../../api/user_api";
     export default {
         data: () => ({
+            search:'',
             users:[],
             roles:[ {id: 1,name: 'ROLE_ADMIN',text:'Администратор'}, {id: 2,name: 'ROLE_USER',text:'Пользователь'}],
             user:{},
@@ -101,6 +131,9 @@
             dialog: false,
             headers: [
                 { text: 'Логин', align: 'start', sortable: false, value: 'username',},
+                { text: 'Имя', value: 'name' },
+                { text: 'Фамилия', value: 'surname' },
+                { text: 'Отчество', value: 'patronymic' },
                 { text: 'Почта', value: 'email' },
                 { text: 'Роль', value: 'role.name' },
                 // { text: 'Пароль', value: 'password' },
@@ -153,6 +186,7 @@
 
             save () {
                 if (this.user.id === undefined) {
+                    console.log(this.user)
                     user_api.createUserApi(this.user).then((response)=>{
                         this.users.push(response.data);
                         this.close();
