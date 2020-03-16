@@ -153,10 +153,11 @@
 
             save () {
                 if (this.user.id === undefined) {
-                    user_api.createUserApi(this.user).then((response)=>{
+                    user_api.createUserApi(this.user)
+                        .then((response)=>{
                         this.users.push(response.data);
                         this.close();
-                    })
+                        }).catch(er=>alert(er.response.data.message))
 
                 } else {
                     user_api.editUserApi(this.user).then((response)=>{
