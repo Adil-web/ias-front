@@ -24,8 +24,9 @@ export default {
     },
 
 
-    deleteUserApi(){
-        return axios.delete(DELETE_USER, { headers: authHeader() })
+    deleteUserApi(userId){
+        console.log(userId)
+        return axios.get(DELETE_USER +'?userId='+userId,{ headers: authHeader() })
     }
 
 

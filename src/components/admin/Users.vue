@@ -136,19 +136,14 @@
             },
 
             deleteItem (userItem) {
-                if (confirm('Are you sure you want to delete this item?')){
-                    const index = this.users.indexOf(userItem);
-                    user_api.deleteUserApi(this.user).then((response)=>{
-                        console.log(response)
+                if (confirm('Вы уверены что хотите удалить пользователя?')){
+                    user_api.deleteUserApi(userItem.id).then(()=>{
+                        const index = this.users.indexOf(userItem);
                         this.users.splice(index,1)
                     })
-
                 } else {
-                    console.log("нет")
+                    console.log("Не удалось удалить пользователя")
                 }
-
-
-
             },
 
             close () {
