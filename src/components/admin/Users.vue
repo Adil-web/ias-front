@@ -1,5 +1,5 @@
 <template>
-    <v-data-table v-if ="users.length!==0"
+    <v-data-table
             dense
             :headers="headers"
             :items="users"
@@ -115,7 +115,6 @@
             <v-btn color="primary" @click="initialize">Reset</v-btn>
         </template>
     </v-data-table>
-    <div v-else> Ожидайте загрузка</div>
 </template>
 
 <script>
@@ -190,7 +189,7 @@
                     user_api.createUserApi(this.user).then((response)=>{
                         this.users.push(response.data);
                         this.close();
-                    })
+                        }).catch(er=>alert(er.response.data.message))
 
                 } else {
                     user_api.editUserApi(this.user).then((response)=>{

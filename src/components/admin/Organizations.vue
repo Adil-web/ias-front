@@ -1,5 +1,5 @@
 <template>
-    <v-data-table v-if ="users.length!==0"
+    <v-data-table
                   dense
                   :headers="headers"
                   :items="users"
@@ -32,7 +32,6 @@
             <v-btn color="primary" @click="initialize">Reset</v-btn>
         </template>
     </v-data-table>
-    <div v-else> Ожидайте загрузка</div>
 </template>
 
 <script>
