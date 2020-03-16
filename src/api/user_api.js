@@ -7,6 +7,7 @@ const GET_USERS='/api/test/users';
 const EDIT_USER='/api/test/edit';
 const CREATE_USER='/api/test/create';
 const DELETE_USER='/api/test/delete';
+const RECOVERY_USER='/api/test/recovery';
 
 export default {
 
@@ -27,6 +28,11 @@ export default {
     deleteUserApi(userId, bool){
         console.log(userId)
         return axios.get(DELETE_USER +'?userId='+userId+'&bool='+ bool,{ headers: authHeader() })
+    },
+
+    recoveryUserApi(userId, bool){
+        console.log(userId)
+        return axios.get(RECOVERY_USER +'?userId='+userId+'&bool='+ bool,{ headers: authHeader() })
     }
 
 

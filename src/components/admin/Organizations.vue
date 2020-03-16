@@ -87,7 +87,7 @@
 
             deleteItem (userItem) {
                 if (confirm('Вы уверены что хотите удалить пользователя?')){
-                    user_api.deleteUserApi(userItem.id, false).then(()=>{
+                    user_api.recoveryUserApi(userItem.id, false).then(()=>{
                         const index = this.users.indexOf(userItem);
                         this.users.splice(index,1)
                     })
