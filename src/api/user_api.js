@@ -9,6 +9,7 @@ const CREATE_USER='/api/test/create';
 const DELETE_USER='/api/test/delete';
 const RECOVERY_USER='/api/test/recovery';
 const REMOVE_USER='/api/test/remove';
+const GET_CURRENT_SESSION_USER='/api/auth/get_session_user';
 
 export default {
 
@@ -26,9 +27,9 @@ export default {
     },
 
 
-    deleteUserApi(userId, bool){
+    deleteUserApi(userId, bool,roleId){
         console.log(userId)
-        return axios.get(DELETE_USER +'?userId='+userId+'&bool='+ bool,{ headers: authHeader() })
+        return axios.get(DELETE_USER +'?userId='+userId+'&bool='+ bool+'&roleId='+roleId,{ headers: authHeader() })
     },
 
     recoveryUserApi(userId, bool){
@@ -39,6 +40,12 @@ export default {
     removeUserApi(userId){
         console.log(userId)
         return axios.get(REMOVE_USER +'?userId='+userId,{ headers: authHeader() })
+    },
+
+
+    get_session_user(){
+
+        return axios.get(GET_CURRENT_SESSION_USER,{ headers: authHeader() })
     },
 
 

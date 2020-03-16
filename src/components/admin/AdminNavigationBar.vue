@@ -48,6 +48,7 @@
 <script>
     import Profile from "@/components/shared/Profile";
     import {mapMutations} from "vuex";
+    // import user_api from "../../api/user_api";
 
     export default {
         name: "AdminNavigationBar",
@@ -76,6 +77,7 @@
             },
 
             openCloseProfile(){
+                console.log(this.user)
                 this.profile=!this.profile
             },
         },
@@ -83,6 +85,12 @@
 
 
         computed:{
+            user:{
+                get(){
+                    return this.$store.state.user;
+                }
+            },
+
             leftBar:{
                 get () {
                     return this.$store.state.drawer

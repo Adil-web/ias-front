@@ -112,7 +112,7 @@
             </v-icon>
         </template>
         <template v-slot:no-data>
-            <v-btn color="primary" @click="initialize">Reset</v-btn>
+<!--            <v-btn color="primary" @click="initialize">Reset</v-btn>-->
         </template>
     </v-data-table>
 </template>
@@ -169,7 +169,7 @@
 
             deleteItem (userItem) {
                 if (confirm('Вы уверены что хотите удалить пользователя?')){
-                    user_api.deleteUserApi(userItem.id, true)
+                    user_api.deleteUserApi(userItem.id, true, userItem.role_id)
                         .then(()=>{
                             const index = this.users.indexOf(userItem);
                             this.users.splice(index,1)
