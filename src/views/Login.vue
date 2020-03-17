@@ -10,8 +10,8 @@
                     </v-toolbar>
                     <v-card-text>
                         <v-form>
-                            <v-text-field  prepend-icon="mdi-logout" name="login" label="Login" type="text" v-model="username"></v-text-field>
-                            <v-text-field id="password" prepend-icon="mdi-security" name="password" label="Password" type="password" v-model="password"></v-text-field>
+                            <v-text-field  prepend-icon="mdi-logout" name="login" placeholder="Login" type="text" v-model="username"></v-text-field>
+                            <v-text-field id="password" prepend-icon="mdi-security" name="password" placeholder="Password" type="password" v-model="password"></v-text-field>
                         </v-form>
                     </v-card-text>
                     <v-card-actions>
