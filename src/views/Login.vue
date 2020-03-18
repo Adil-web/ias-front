@@ -1,29 +1,39 @@
 <template>
-<v-app>
-    <v-container fluid fill-height>
-        <v-layout align-center justify-center>
-            <v-flex xs12 sm8 md4>
-                <v-card class="elevation-12">
-                    <v-toolbar color="primary">
-                        <v-toolbar-title>Login form</v-toolbar-title>
-                        <v-spacer></v-spacer>
-                    </v-toolbar>
-                    <v-card-text>
-                        <v-form>
-                            <v-text-field  prepend-icon="mdi-logout" name="login" placeholder="Login" type="text" v-model="username"></v-text-field>
-                            <v-text-field id="password" prepend-icon="mdi-security" name="password" placeholder="Password" type="password" v-model="password"></v-text-field>
-                        </v-form>
-                    </v-card-text>
-                    <v-card-actions>
-                        <v-spacer></v-spacer>
-                        <v-btn color="primary" v-on:click="submit">Login</v-btn>
-                    </v-card-actions>
-                    <v-alert v-if="errorMessage"  dense type="error">{{errorMessage}}</v-alert>
-                </v-card>
-            </v-flex>
-        </v-layout>
-    </v-container>
-</v-app>
+    <v-app >
+        <v-container fluid fill-height >
+            <!-- background image -->
+            <v-img
+                    src="./../assets/login-bg.jpg"
+                    class="login-bg"
+            ></v-img>
+            <v-layout align-center justify-center>
+                <div style="max-width: 500px; margin: 0 auto;" xs12>
+                    <v-card tile style="background-color: rgba(255,255,255,0.7); border-radius: 25px" class="pt-5" >
+                        <v-img
+                                src="./../assets/Atiray-logo.png"
+                                height="150px"
+                                width="150px"
+                                class="mx-auto mb-5"
+                        ></v-img>
+                        <div class="text-center blue accent-2">
+                            <v-card-title>Информационно-аналитическая система</v-card-title>
+                            <v-card-subtitle >Атырауской области</v-card-subtitle>
+                        </div>
+                        <v-card-text>
+                            <v-form>
+                                <v-text-field  prepend-icon="mdi-logout" name="login" placehoder="Логин" type="text" v-model="username"></v-text-field>
+                                <v-text-field id="password" prepend-icon="mdi-security" name="password" placeholder="Пароль" type="password" v-model="password"></v-text-field>
+                            </v-form>
+                        </v-card-text>
+                        <v-card-actions class="pb-5">
+                            <v-btn rounded block color="blue accent-2" v-on:click="submit" >Войти</v-btn>
+                        </v-card-actions>
+                        <v-alert v-if="errorMessage" dense type="error">{{errorMessage}}</v-alert>
+                    </v-card>
+                </div>
+            </v-layout>
+        </v-container>
+    </v-app>
 
 </template>
 
@@ -40,16 +50,16 @@
                 'ROLE_USER': '/main/home',
                 'ROLE_ADMIN':'/admin/users'
             }
-    }),
+        }),
 
         methods:{
             submit(){
-               this.$store.dispatch('loginAction',{username:this.username, password:this.password})
-                   .then(()=>{
-                      this.routeTo(this.rolesRoutes[this.user.role.name]);
-                }).catch(er=>{
+                this.$store.dispatch('loginAction',{username:this.username, password:this.password})
+                    .then(()=>{
+                        this.routeTo(this.rolesRoutes[this.user.role.name]);
+                    }).catch(er=>{
                     this.errorMessage=er.response.data.message;
-               })
+                })
 
 
             },
@@ -84,6 +94,16 @@
 </script>
 
 <style scoped>
-
-
+    /* background image styles */
+    .login-bg {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+        background-repeat: no-repeat;
+        background-position: center center;
+        background-size: cover;
+        background-color: #1976D2;
+    }
 </style>

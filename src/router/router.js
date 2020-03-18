@@ -3,6 +3,7 @@ import Login from '@/views/Login';
 import Home from '@/views/Home';
 import Users from '@/components/admin/Users';
 import Organizations from '@/components/admin/Organizations';
+import PowerBI from '@/components/admin/PowerBI';
 
 import Vue from 'vue';
 import MainLayout from '@/components/shared/MainLayout';
@@ -21,7 +22,9 @@ const router =  new VueRouter({
         { path: '/main', name:'main', component: MainLayout, children:[
                 {
                     path: 'home', name:'home', component: Home
-                }
+                },
+
+
             ]
         },
         { path: '/login', name:'login', component: Login},
@@ -32,6 +35,9 @@ const router =  new VueRouter({
                 },
                 {
                     path: 'organizations', name: 'organizations', component: Organizations
+                },
+                {
+                    path: 'powerbi', name: 'powerbi', component: PowerBI
                 },
 
             ]

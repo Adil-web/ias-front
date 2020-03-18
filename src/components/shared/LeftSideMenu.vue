@@ -9,6 +9,7 @@
                 <template v-for="item in items">
                     <v-list-item
                             :key="item.text"
+                            :to='item.path'
                             link
                     >
                         <v-list-item-action>
@@ -37,7 +38,7 @@
             expandOnHover: false,
 
             items: [
-                { icon: 'mdi-alarm-light-outline', text: 'Оперативный мониторинг' },
+                { icon: 'mdi-alarm-light-outline', text: 'Оперативный мониторинг', path:'./shared/powerbi'},
                 { icon: ' mdi-av-timer', text: 'Стратегическое управление' },
                 { icon: 'mdi-chart-areaspline', text: 'Мониторинг социально-экономического развития' },
                 { icon: 'mdi-currency-eur', text: 'Бюджет' },

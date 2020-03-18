@@ -42,9 +42,8 @@
             items: [
 
                 { icon: 'mdi-account', text: 'Пользователи', path:'/admin/users' },
-
-
                 { icon: 'mdi-delete-variant ', text: 'Корзина' ,path:'/admin/organizations'},
+                { icon: 'mdi-delete-variant ', text: 'PowerBI' ,path:'/admin/powerbi'},
 
             ],
         }),
