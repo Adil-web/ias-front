@@ -23,6 +23,9 @@ const router =  new VueRouter({
                 {
                     path: 'home', name:'home', component: Home
                 },
+                {
+                    path: 'powerbi', name: 'powerbi', component: PowerBI
+                },
 
 
             ]

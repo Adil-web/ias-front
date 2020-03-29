@@ -38,7 +38,7 @@
             expandOnHover: false,
 
             items: [
-                { icon: 'mdi-alarm-light-outline', text: 'Оперативный мониторинг', path:'./shared/powerbi'},
+                { icon: 'mdi-alarm-light-outline', text: 'Оперативный мониторинг', path:'powerbi'},
                 { icon: ' mdi-av-timer', text: 'Стратегическое управление' },
                 { icon: 'mdi-chart-areaspline', text: 'Мониторинг социально-экономического развития' },
                 { icon: 'mdi-currency-eur', text: 'Бюджет' },
