@@ -140,7 +140,17 @@
             formTitle () {
                 return this.user.id === undefined ? 'New Item' : 'Edit Item'
             },
+            sessionUser:{
+                get(){
+                    return this.$store.state.user;
+                },
+                set (val) {
+                    return this.$store.state.user = val
+                }
+            },
         },
+
+
 
         watch: {
             dialog (val) {
@@ -164,7 +174,10 @@
             },
 
             deleteItem (userItem) {
-                if (confirm('Вы уверены что хотите удалить пользователя?')){
+                if(this.sessionUser.id===userItem.id){
+                    alert("Невозможно удалить свою же учетную запись"); return ''
+                }
+                else if  (confirm('Вы уверены что хотите удалить пользователя?')){
                     user_api.deleteUserApi(userItem.id, true, userItem.role_id)
                         .then(()=>{
                             const index = this.users.indexOf(userItem);
