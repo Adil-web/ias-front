@@ -1,56 +1,59 @@
 <template>
-    <v-card width="700">
-        <v-card-title class="blue darken-3 white--text">
-            <span class="headline">Карточка пользователя</span>
-            <v-row class="fill-height" justify="end">
-                <v-btn dark icon class="mr-4">
-                    <v-icon>mdi-pencil</v-icon>
-                </v-btn>
-                <v-btn dark icon @click="closeCard">
-                    <v-icon  class="mr-1">mdi-location-exit</v-icon>
-                </v-btn>
-            </v-row>
-        </v-card-title>
+    <v-card width="500">
+        <v-toolbar flat :color="user.role.id===1?'green darken-3 white--text':'blue darken-3 white--text'">
+            <v-icon class="pa-2">mdi-account</v-icon>
+            <v-toolbar-title class="font-weight-light ">Карточка пользователя</v-toolbar-title>
+            <v-spacer></v-spacer>
+            <v-btn dark icon @click="closeCard">
+                <v-icon  class="mr-1">mdi-location-exit</v-icon>
+            </v-btn>
+        </v-toolbar>
 
         <v-list two-line>
             <v-list-item>
                 <v-list-item-icon>
-                    <v-icon color="indigo">mdi-phone</v-icon>
+                    <v-icon color="blue darken-3">mdi-map-marker</v-icon>
                 </v-list-item-icon>
 
                 <v-list-item-content>
-                    <v-list-item-title>(650) 555-1234</v-list-item-title>
-                    <v-list-item-subtitle>Mobile</v-list-item-subtitle>
+                    <v-list-item-title>{{user.name}}</v-list-item-title>
+                    <v-list-item-subtitle>Имя</v-list-item-subtitle>
                 </v-list-item-content>
 
+            </v-list-item>
+
+
+            <v-list-item>
                 <v-list-item-icon>
-                    <v-icon>mdi-message-text</v-icon>
+                    <v-icon color="blue darken-3">mdi-phone</v-icon>
                 </v-list-item-icon>
+
+                <v-list-item-content>
+                    <v-list-item-title>{{user.surname}}</v-list-item-title>
+                    <v-list-item-subtitle>Фамилия</v-list-item-subtitle>
+                </v-list-item-content>
             </v-list-item>
 
             <v-list-item>
                 <v-list-item-action></v-list-item-action>
 
                 <v-list-item-content>
-                    <v-list-item-title>(323) 555-6789</v-list-item-title>
-                    <v-list-item-subtitle>Work</v-list-item-subtitle>
+                    <v-list-item-title>{{user.patronymic}}</v-list-item-title>
+                    <v-list-item-subtitle>Отчество</v-list-item-subtitle>
                 </v-list-item-content>
 
-                <v-list-item-icon>
-                    <v-icon>mdi-message-text</v-icon>
-                </v-list-item-icon>
             </v-list-item>
 
             <v-divider inset></v-divider>
 
             <v-list-item>
                 <v-list-item-icon>
-                    <v-icon color="indigo">mdi-email</v-icon>
+                    <v-icon color="blue darken-3">mdi-email</v-icon>
                 </v-list-item-icon>
 
                 <v-list-item-content>
                     <v-list-item-title>aliconnors@example.com</v-list-item-title>
-                    <v-list-item-subtitle>Personal</v-list-item-subtitle>
+                    <v-list-item-subtitle>Электронная почта</v-list-item-subtitle>
                 </v-list-item-content>
             </v-list-item>
 
@@ -59,22 +62,11 @@
 
                 <v-list-item-content>
                     <v-list-item-title>ali_connors@example.com</v-list-item-title>
-                    <v-list-item-subtitle>Work</v-list-item-subtitle>
+                    <v-list-item-subtitle>Корпоративная почта</v-list-item-subtitle>
                 </v-list-item-content>
             </v-list-item>
 
-            <v-divider inset></v-divider>
 
-            <v-list-item>
-                <v-list-item-icon>
-                    <v-icon color="indigo">mdi-map-marker</v-icon>
-                </v-list-item-icon>
-
-                <v-list-item-content>
-                    <v-list-item-title>1400 Main Street</v-list-item-title>
-                    <v-list-item-subtitle>Orlando, FL 79938</v-list-item-subtitle>
-                </v-list-item-content>
-            </v-list-item>
         </v-list>
     </v-card>
 </template>
@@ -85,7 +77,19 @@
         methods:{
             closeCard(){
                 this.$emit('close-user-card')
-            }
+            },
+
+        },
+
+        computed:{
+            user:{
+                get(){
+                    return this.$store.state.user;
+                },
+                set (val) {
+                    return this.$store.state.user = val
+                }
+            },
         },
     }
 </script>

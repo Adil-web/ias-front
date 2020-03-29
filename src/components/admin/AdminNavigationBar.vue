@@ -37,7 +37,7 @@
             </v-btn>
 
 
-            <v-dialog v-if="profile" v-model="profile" persistent width="700">
+            <v-dialog v-if="profile" v-model="profile" persistent width="500">
                 <profile v-on:close-user-card="openCloseProfile"></profile>
             </v-dialog>
         </v-app-bar>
