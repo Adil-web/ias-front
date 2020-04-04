@@ -4,6 +4,21 @@ import Home from '@/views/Home';
 import Users from '@/components/admin/Users';
 import Organizations from '@/components/admin/Organizations';
 import PowerBI from '@/components/admin/PowerBI';
+import StrategicManagement from '@/components/admin/StrategicManagement';
+import BudgetInvestment from '@/components/admin/BudgetInvestment';
+import DigitalSocialObj from '@/components/admin/DigitalSocialObj';
+import Education from '@/components/admin/Education';
+import EducationAssessment from '@/components/admin/EducationAssessment';
+import GraduateToVillage from "../components/admin/GraduateToVillage";
+import HealthAssessment from "../components/admin/HealthAssessment";
+import LivestockAnalysis from "../components/admin/LivestockAnalysis";
+import PredictionGRP from "../components/admin/PredictionGRP";
+import SocialMonitoring from "../components/admin/SocialMonitoring";
+import SocialProtection from "../components/admin/SocialProtection";
+
+
+
+
 
 import Vue from 'vue';
 import MainLayout from '@/components/shared/MainLayout';
@@ -24,7 +39,37 @@ const router =  new VueRouter({
                     path: 'home', name:'home', component: Home
                 },
                 {
-                    path: 'powerbi', name: 'powerbi', component: PowerBI
+                    path: 'strategicManagement', name: 'strategicManagement', component: StrategicManagement
+                },
+                {
+                    path: 'budgetInvestment', name: 'budgetInvestment', component: BudgetInvestment
+                },
+                {
+                    path: 'digitalSocialObj', name: 'digitalSocialObj', component: DigitalSocialObj
+                },
+                {
+                    path: 'education', name: 'education', component: Education
+                },
+                {
+                    path: 'educationAssessment', name: 'educationAssessment', component: EducationAssessment
+                },
+                {
+                    path: 'graduateToVillage', name: 'graduateToVillage', component: GraduateToVillage
+                },
+                {
+                    path: 'healthAssessment', name: 'healthAssessment', component: HealthAssessment
+                },
+                {
+                    path: 'livestockAnalysis', name: 'livestockAnalysis', component: LivestockAnalysis
+                },
+                {
+                    path: 'predictionGRP', name: 'predictionGRP', component: PredictionGRP
+                },
+                {
+                    path: 'socialMonitoring', name: 'socialMonitoring', component: SocialMonitoring
+                },
+                {
+                    path: 'socialProtection', name: 'socialProtection', component: SocialProtection
                 },
 
 

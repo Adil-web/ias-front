@@ -1,0 +1,18 @@
+<template>
+    <div class="ma-auto">
+        <iframe width="800" height="600" src="https://app.powerbi.com/view?r=eyJrIjoiY2I5NWZiZDYtYTNlMS00ZWFmLTkwYjktODdjYmE1ZDY5YzEzIiwidCI6IjU1MDhkZmUzLWYwYWYtNGEyOS1hMjljLTY5N2JhYjIzNDRjNiIsImMiOjl9"
+                frameborder="0" allowFullScreen="true"></iframe>
+    </div>
+
+
+</template>
+
+<script>
+    export default {
+        name: "Education"
+    }
+</script>
+
+<style scoped>
+
+</style>
