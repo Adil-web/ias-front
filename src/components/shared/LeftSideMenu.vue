@@ -41,7 +41,7 @@
                 { icon: 'mdi-alarm-light-outline', text: 'Оперативный мониторинг'},
                 { icon: ' mdi-av-timer', text: 'Стратегическое управление', path: 'strategicManagement' },
                 { icon: 'mdi-chart-areaspline', text: 'Мониторинг социально-экономического развития' , path:'socialMonitoring'},
-                { icon: 'mdi-currency-eur', text: 'Бюджет'},
+                { icon: 'mdi-currency-eur', text: 'Бюджет', path:'budget'},
                 { icon: 'mdi-wan', text: 'Прогноз ВРП', path:'predictionGRP'},
                 { icon: 'mdi-offer', text: 'Бюджетные инвестиционные проекты', path:'budgetInvestment'},
                 { icon: 'mdi-school-outline', text: 'С дипломом в село', path:'graduateToVillage'},

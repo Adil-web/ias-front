@@ -4,17 +4,18 @@ import Home from '@/views/Home';
 import Users from '@/components/admin/Users';
 import Organizations from '@/components/admin/Organizations';
 import PowerBI from '@/components/admin/PowerBI';
-import StrategicManagement from '@/components/admin/StrategicManagement';
-import BudgetInvestment from '@/components/admin/BudgetInvestment';
-import DigitalSocialObj from '@/components/admin/DigitalSocialObj';
-import Education from '@/components/admin/Education';
-import EducationAssessment from '@/components/admin/EducationAssessment';
-import GraduateToVillage from "../components/admin/GraduateToVillage";
-import HealthAssessment from "../components/admin/HealthAssessment";
-import LivestockAnalysis from "../components/admin/LivestockAnalysis";
-import PredictionGRP from "../components/admin/PredictionGRP";
-import SocialMonitoring from "../components/admin/SocialMonitoring";
-import SocialProtection from "../components/admin/SocialProtection";
+import StrategicManagement from '@/components/powerbi/StrategicManagement';
+import Budget from "../components/powerbi/Budget";
+import BudgetInvestment from '@/components/powerbi/BudgetInvestment';
+import DigitalSocialObj from '@/components/powerbi/DigitalSocialObj';
+import Education from '@/components/powerbi/Education';
+import EducationAssessment from '@/components/powerbi/EducationAssessment';
+import GraduateToVillage from "../components/powerbi/GraduateToVillage";
+import HealthAssessment from "../components/powerbi/HealthAssessment";
+import LivestockAnalysis from "../components/powerbi/LivestockAnalysis";
+import PredictionGRP from "../components/powerbi/PredictionGRP";
+import SocialMonitoring from "../components/powerbi/SocialMonitoring";
+import SocialProtection from "../components/powerbi/SocialProtection";
 
 
 
@@ -40,6 +41,9 @@ const router =  new VueRouter({
                 },
                 {
                     path: 'strategicManagement', name: 'strategicManagement', component: StrategicManagement
+                },
+                {
+                    path: 'budget', name: 'budget', component: Budget
                 },
                 {
                     path: 'budgetInvestment', name: 'budgetInvestment', component: BudgetInvestment
