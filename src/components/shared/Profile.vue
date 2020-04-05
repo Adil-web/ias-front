@@ -12,7 +12,7 @@
         <v-list two-line>
             <v-list-item>
                 <v-list-item-icon>
-                    <v-icon color="blue darken-3">mdi-map-marker</v-icon>
+                    <v-icon color="green darken-3"> </v-icon>
                 </v-list-item-icon>
 
                 <v-list-item-content>
@@ -25,7 +25,7 @@
 
             <v-list-item>
                 <v-list-item-icon>
-                    <v-icon color="blue darken-3">mdi-phone</v-icon>
+                    <v-icon color="blue darken-3"> </v-icon>
                 </v-list-item-icon>
 
                 <v-list-item-content>
@@ -58,7 +58,9 @@
             </v-list-item>
 
             <v-list-item>
-                <v-list-item-action></v-list-item-action>
+                <v-list-item-icon>
+                    <v-icon color="blue darken-3">mdi-email-sync</v-icon>
+                </v-list-item-icon>
 
                 <v-list-item-content>
                     <v-list-item-title>ali_connors@example.com</v-list-item-title>
