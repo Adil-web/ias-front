@@ -13,6 +13,12 @@
             <v-spacer />
 
 
+                <v-btn icon @click="$router.push('calendar')">
+                    <v-icon>mdi-calendar-month-outline</v-icon>
+                </v-btn>
+
+
+
             <v-btn icon  @click="openCloseProfile">
                 <v-icon>mdi-account-circle</v-icon>
             </v-btn>

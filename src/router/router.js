@@ -7,6 +7,7 @@ import PowerBI from '@/components/admin/PowerBI';
 
 import Vue from 'vue';
 import MainLayout from '@/components/shared/MainLayout';
+import Calendar from '@/components/shared/Calendar';
 import AdminLayout from "@/components/admin/AdminLayout";
 
 Vue.use(VueRouter);
@@ -26,6 +27,9 @@ const router =  new VueRouter({
                 {
                     path: 'powerbi', name: 'powerbi', component: PowerBI
                 },
+                {
+                    path: 'calendar', name: 'calendar', component: Calendar
+                },
 
 
             ]
@@ -41,6 +45,9 @@ const router =  new VueRouter({
                 },
                 {
                     path: 'powerbi', name: 'powerbi', component: PowerBI
+                },
+                {
+                    path: 'calendar', name: 'calendar', component: Calendar
                 },
 
             ]
