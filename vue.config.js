@@ -1,5 +1,13 @@
 module.exports = {
   outputDir:'/var/www/ias-front/',
+  publicPath: './',
+  assetsDir: undefined,
+  runtimeCompiler: true,
+  productionSourceMap: undefined,
+  parallel: undefined,
+  css: {
+    extract: false
+  },
   devServer: {
     // contentBase: path.join(__dirname, 'public'),
     compress: true,
