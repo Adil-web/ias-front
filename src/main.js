@@ -15,7 +15,9 @@ import router from '@/router/router'
 
 
 
-axios.defaults.baseURL='http://localhost:8090';
+axios.defaults.baseURL='http://localhost:8090/ap/v1';
+
+
 Vue.config.productionTip = false;
 Vue.use(VueI18n);
 

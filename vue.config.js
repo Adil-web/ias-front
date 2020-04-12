@@ -1,4 +1,5 @@
 module.exports = {
+  outputDir:'/var/www/ias-front/',
   devServer: {
     // contentBase: path.join(__dirname, 'public'),
     compress: true,
