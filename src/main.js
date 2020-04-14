@@ -15,12 +15,10 @@ import router from '@/router/router'
 
 
 if(process.env.VUE_API_VARIABLE){
-
-    axios.defaults.baseURL = '/ap/v1'
+    axios.defaults.baseURL = 'http://192.168.1.67:8090/ap/v1'
 }
 else{
-
-    axios.defaults.baseURL = 'http://192.168.1.67:8090/ap/v1'
+    axios.defaults.baseURL = '/ap/v1'
 }
 
 

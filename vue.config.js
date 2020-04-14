@@ -1,6 +1,6 @@
 module.exports = {
+  publicPath: '/',
   outputDir:'/var/www/ias-front/',
-  publicPath: './',
   assetsDir: undefined,
   runtimeCompiler: true,
   productionSourceMap: undefined,
@@ -12,7 +12,7 @@ module.exports = {
     // contentBase: path.join(__dirname, 'public'),
     compress: true,
     open: true,
-    port: 8080
+    //port: 8080
     // ,
     //
     // proxy: {
