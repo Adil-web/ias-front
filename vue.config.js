@@ -8,6 +8,7 @@ module.exports = {
   css: {
     extract: false
   },
+  lintOnSave:false,
   devServer: {
     // contentBase: path.join(__dirname, 'public'),
     compress: true,

@@ -14,17 +14,17 @@ import router from '@/router/router'
 
 
 
-if(process.env.VUE_API_VARIABLE){
-    axios.defaults.baseURL = 'http://192.168.1.67:8090/ap/v1'
-}
-else{
-    axios.defaults.baseURL = '/ap/v1'
-}
+// if(process.env.VUE_API_VARIABLE){
+//     axios.defaults.baseURL = 'http://192.168.1.67:8090/ap/v1'
+// }
+// else{
+//     axios.defaults.baseURL = '/ap/v1'
+// }
 
 
 
 // Локально
-// axios.defaults.baseURL='http://localhost:8090/ap/v1';
+axios.defaults.baseURL='http://localhost:8090/ap/v1';
 
 
 Vue.config.productionTip = false;
