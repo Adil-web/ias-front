@@ -4,18 +4,9 @@ import Home from '@/views/Home';
 import Users from '@/components/admin/Users';
 import Organizations from '@/components/admin/Organizations';
 import PowerBI from '@/components/admin/PowerBI';
-import StrategicManagement from '@/components/powerbi/StrategicManagement';
+
 import Budget from "../components/powerbi/Budget";
-import BudgetInvestment from '@/components/powerbi/BudgetInvestment';
-import DigitalSocialObj from '@/components/powerbi/DigitalSocialObj';
-import Education from '@/components/powerbi/Education';
-import EducationAssessment from '@/components/powerbi/EducationAssessment';
-import GraduateToVillage from "../components/powerbi/GraduateToVillage";
-import HealthAssessment from "../components/powerbi/HealthAssessment";
-import LivestockAnalysis from "../components/powerbi/LivestockAnalysis";
-import PredictionGRP from "../components/powerbi/PredictionGRP";
-import SocialMonitoring from "../components/powerbi/SocialMonitoring";
-import SocialProtection from "../components/powerbi/SocialProtection";
+
 
 
 
@@ -41,40 +32,10 @@ const router =  new VueRouter({
                     path: 'home', name:'home', component: Home
                 },
                 {
-                    path: 'strategicManagement', name: 'strategicManagement', component: StrategicManagement
+                    path: 'powerbi', name: 'powerbi', component: PowerBI
                 },
-                {
-                    path: 'budget', name: 'budget', component: Budget
-                },
-                {
-                    path: 'budgetInvestment', name: 'budgetInvestment', component: BudgetInvestment
-                },
-                {
-                    path: 'digitalSocialObj', name: 'digitalSocialObj', component: DigitalSocialObj
-                },
-                {
-                    path: 'education', name: 'education', component: Education
-                },
-                {
-                    path: 'educationAssessment', name: 'educationAssessment', component: EducationAssessment
-                },
-                {
-                    path: 'graduateToVillage', name: 'graduateToVillage', component: GraduateToVillage
-                },
-                {
-                    path: 'healthAssessment', name: 'healthAssessment', component: HealthAssessment
-                },
-                {
-                    path: 'livestockAnalysis', name: 'livestockAnalysis', component: LivestockAnalysis
-                },
-                {
-                    path: 'predictionGRP', name: 'predictionGRP', component: PredictionGRP
-                },
-                {
-                    path: 'socialMonitoring', name: 'socialMonitoring', component: SocialMonitoring
-                },
-                {
-                    path: 'socialProtection', name: 'socialProtection', component: SocialProtection
+                               {
+                    path: 'budget', name: 'budget', component: Budget, props:true
                 },
                 {
                     path: 'calendar', name: 'calendar', component: Calendar
@@ -91,9 +52,6 @@ const router =  new VueRouter({
                 },
                 {
                     path: 'organizations', name: 'organizations', component: Organizations
-                },
-                {
-                    path: 'powerbi', name: 'powerbi', component: PowerBI
                 },
                 {
                     path: 'calendar', name: 'calendar', component: Calendar
