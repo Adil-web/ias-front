@@ -6,7 +6,7 @@
         >
             <div class="calendar__title">{{ monthTitle }}</div>
             <div class="calendar__body">
-                <div v-for="(day, key) in 7" :key="`title${day}`" class="calendar__day day__weektitle" :style="{fontSize: weekTitleFontSizeAdjustLang}">{{ showDayTitle(key) }}</div>
+                <div v-for="(day, key) in 7" :key="`title${day}`" class="calendar__day day__weektitle">{{ showDayTitle(key) }}</div>
                 <div v-for="(dayObj, key) in showDays" class="calendar__day" :key="`day${key}`">
                     <div
                             @mouseover="dragDay(dayObj)"
@@ -40,10 +40,6 @@
                 type: String,
                 default: 'en'
             },
-            activeClass: {
-                type: String,
-                default: () => ''
-            },
             prefixClass: {
                 type: String,
                 default: () => 'calendar--active'
@@ -56,16 +52,6 @@
             }
         },
         computed: {
-            weekTitleFontSizeAdjustLang () {
-                const fontSizeMapping = {
-                    en: '14px',
-                    pt: '14px',
-                    de: '14px',
-                    es: '14px',
-                    ru: '12px'
-                }
-                return fontSizeMapping[this.lang]
-            },
             monthTitle () {
                 const monthMapping = {
 
@@ -118,8 +104,7 @@
                 this.$emit('toggleDate', {
                     month: this.month,
                     date: dayObj.value,
-                    selected: !dayObj.active,
-                    className: this.activeClass
+                    selected: !dayObj.active
                 })
             },
             dragDay (dayObj) {
@@ -145,14 +130,8 @@
         },
         watch: {
             year (val) {
-                console.log(val)
                 this.initCalendar()
-            },
-            // activeDates (after, before) {
-            //     console.log(after)
-            //     console.log(before)
-            //     this.initCalendar()
-            // }
+            }
         },
 
         created () {
