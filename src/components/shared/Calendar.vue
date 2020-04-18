@@ -1,17 +1,18 @@
 <template>
-    <div id="app">
+    <div id="calendar">
         <year-calendar
                 v-model="year"
                 :activeDates.sync="activeDates"
                 @toggleDate="toggleDate"
-                :lang="lang"
+                :lang="locale"
                 prefixClass="your_customized_wrapper_class"
-                :activeClass="activeClass"
         ></year-calendar>
     </div>
 </template>
 
 <script>
+    import dayjs from 'dayjs'
+
     import YearCalendar from './YearCalendar.vue'
 
     export default {
@@ -21,16 +22,25 @@
         },
         data () {
             return {
-                lang: 'en', // 'en', 'tw', 'pt'
-                year: 2020,
-                activeDates: [],
-                activeClass: '',
+                year: dayjs().year(),
+                activeDates: []
             }
         },
         methods: {
             toggleDate (dateInfo) {
                 console.log(dateInfo)
             },
+        },
+
+        computed:{
+            locale: {
+                get () {
+                    return this.$i18n.locale
+                },
+                set (val) {
+                    this.$i18n.locale = val
+                }
+            }
         }
     }
 </script>
@@ -41,7 +51,7 @@
         padding: 0;
         box-sizing: border-box;
     }
-    #app {
+    #calendar {
         padding: 60px;
         background-color: red;
     }

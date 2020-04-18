@@ -6,7 +6,7 @@
         >
             <div class="calendar__title">{{ monthTitle }}</div>
             <div class="calendar__body">
-                <div v-for="(day, key) in 7" :key="`title${day}`" class="calendar__day day__weektitle">{{ showDayTitle(key) }}</div>
+                <div v-for="(day, key) in 7" :key="`title${day}`" class="calendar__day day__weektitle"  :style="{fontSize: weekTitleFontSizeAdjustLang}">{{ showDayTitle(key) }}</div>
                 <div v-for="(dayObj, key) in showDays" class="calendar__day" :key="`day${key}`">
                     <div
                             @mouseover="dragDay(dayObj)"
@@ -52,15 +52,26 @@
             }
         },
         computed: {
+            weekTitleFontSizeAdjustLang () {
+                const fontSizeMapping = {
+                    en: '14px',
+                    kk: '14px',
+                    ru: '12px'
+                }
+                return fontSizeMapping[this.lang]
+            },
+
             monthTitle () {
                 const monthMapping = {
 
                     en: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
-                    de: ['Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'],
+                    kk: ['Қаңтар', 'Ақпан', 'Наурыз', 'Сәуір', 'Мамыр', 'Маусым', 'Шілде', 'Тамыз', 'Қыркүйек', 'Қазан', 'Қараша', 'Желтоқсан'],
                     ru: ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь']
                 }
                 return monthMapping[this.lang][this.month - 1]
-            }
+            },
+
+
         },
         methods: {
             initCalendar () {
@@ -91,10 +102,8 @@
             },
             showDayTitle (day) {
                 const dayMapping = {
-
                     en: ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'],
-
-                    de: ['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So'],
+                    kk: ['Дс', 'Сс', 'Ср', 'Бс', 'Жм', 'Сб', 'Жк'],
                     ru: ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс']
                 }
                 return dayMapping[this.lang][day]
@@ -221,34 +230,9 @@
         z-index: 1;
         background-color: transparent;
     }
-    .calendar .day.calendar--active:after {
-        background-image: url("../../assets/baseline-remove_circle-24px.svg");
-        background-size: 100% 100%;
-    }
     .calendar .day:not(.calendar__day--otherMonth):hover {
         background-color: rgba(102,102,102,0.1);
         border-radius: 5px;
-    }
-    .calendar .day.calendar--active {
-        background-color: rgba(255,186,186,0.5);
-        color: #bcbcbc;
-    }
-    .calendar .day.calendar--active.info {
-        background-color: rgba(23,162,184,0.8);
-        color: #fff;
-    }
-    .calendar .day.calendar--active.info:after {
-        background-image: url("../../assets/RecordIt.svg");
-        background-size: 100% 100%;
-    }
-    .calendar .day.calendar--active.warning {
-        background-color: rgba(255,193,7,0.7);
-        color: #fff;
-    }
-    .calendar .day.calendar--active.warning:after {
-        background-image: url("../../assets/round-warning-24px.svg");
-        background-color: rgba(234,234,234,0.3);
-        background-size: 100% 100%;
     }
     .calendar .calendar__day--otherMonth {
         color: #eaeaea;
