@@ -23,11 +23,6 @@
                     :lang="lang"
             >
             </month-calendar>
-            <div class="container__month p-0"></div>
-            <div class="container__month p-0"></div>
-            <div class="container__month p-0"></div>
-            <div class="container__month p-0"></div>
-            <div class="container__month p-0"></div>
         </div>
     </div>
 </template>

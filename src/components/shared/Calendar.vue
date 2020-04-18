@@ -51,9 +51,4 @@
         padding: 0;
         box-sizing: border-box;
     }
-    #calendar {
-        padding: 60px;
-        background-color: red;
-    }
-
 </style>
