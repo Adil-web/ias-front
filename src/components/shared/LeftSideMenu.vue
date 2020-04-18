@@ -130,7 +130,7 @@
         }),
         methods:{
           routing(item){
-              this.$router.push({ name: item.path, params: { biSrc: item.src } });
+              this.$router.push({ name: 'bi', params: { id: item.src } });
           },
         },
         computed:{

@@ -3,9 +3,8 @@ import Login from '@/views/Login';
 import Home from '@/views/Home';
 import Users from '@/components/admin/Users';
 import Organizations from '@/components/admin/Organizations';
-import PowerBI from '@/components/admin/PowerBI';
 
-import Budget from "../components/powerbi/Budget";
+import PowerBI from "../components/powerbi/PowerBi";
 
 
 
@@ -32,10 +31,7 @@ const router =  new VueRouter({
                     path: 'home', name:'home', component: Home
                 },
                 {
-                    path: 'powerbi', name: 'powerbi', component: PowerBI
-                },
-                               {
-                    path: 'budget', name: 'budget', component: Budget, props:true
+                    path: 'bi/:id', name: 'bi', component: PowerBI, props:true
                 },
                 {
                     path: 'calendar', name: 'calendar', component: Calendar

@@ -2,7 +2,7 @@
         <iframe
                 width="100%"
                 height="100%"
-                :src="biSrc"
+                :src="id"
                 frameborder="0"
                 allowFullScreen="true"
         >
@@ -14,11 +14,11 @@
 
 <script>
     export default {
-        name: "SocialProtection",
+        name: "PowerBi",
         props:{
-                biSrc:{
+                id:{
                         type: String,
-                        default: () => ''
+                        default: ''
                 }
         },
     }
