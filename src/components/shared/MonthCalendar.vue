@@ -58,23 +58,20 @@
         computed: {
             weekTitleFontSizeAdjustLang () {
                 const fontSizeMapping = {
-                    tw: '16px',
                     en: '14px',
                     pt: '14px',
                     de: '14px',
                     es: '14px',
-                    pl: '12px'
+                    ru: '12px'
                 }
                 return fontSizeMapping[this.lang]
             },
             monthTitle () {
                 const monthMapping = {
-                    tw: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
+
                     en: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
-                    pt: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
                     de: ['Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'],
-                    es: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
-                    pl: ['Styczeń', 'Luty', 'Marzec', 'Kwiecień', 'Maj', 'Czerwiec', 'Lipiec', 'Sierpień', 'Wrzesień', 'Październik', 'Listopad', 'Grudzień']
+                    ru: ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь']
                 }
                 return monthMapping[this.lang][this.month - 1]
             }
@@ -105,36 +102,14 @@
                     })
                 this.showDays = fullCol
 
-                // 把 toggleDate 的內容合併在 initCalendar 裡。
-                this.activeDates.forEach(date => {
-                    let oDate
-
-                    if (typeof date === 'string') {
-                        oDate = {
-                            date: date,
-                            className: this.activeClass
-                        }
-                    } else if (typeof date === 'object') {
-                        oDate = date
-                    }
-
-                    let dayjsObj = dayjs(oDate.date)
-                    if (dayjsObj.year() !== this.year) return
-                    let activeDate = dayjsObj.date()
-                    let row = Math.floor(activeDate / 7)
-                    let activeArrayKey = (activeDate % 7) - 1 + firstDay + 7 * row
-                    this.showDays[activeArrayKey].active = true // to array index
-                    this.showDays[activeArrayKey].className = oDate.className
-                })
             },
             showDayTitle (day) {
                 const dayMapping = {
-                    tw: ['一', '二', '三', '四', '五', '六', '日'],
+
                     en: ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'],
-                    pt: ['2ª', '3ª', '4ª', '5ª', '6ª', 'Sa', 'Do'],
+
                     de: ['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So'],
-                    es: ['Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sá', 'Do'],
-                    pl: ['Pon', 'Wt', 'Śr', 'Czw', 'Pt', 'Sob', 'Nie']
+                    ru: ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс']
                 }
                 return dayMapping[this.lang][day]
             },
@@ -173,13 +148,13 @@
                 console.log(val)
                 this.initCalendar()
             },
-            // 外層來的資料有變化時
-            activeDates (after, before) {
-                console.log(after)
-                console.log(before)
-                this.initCalendar()
-            }
+            // activeDates (after, before) {
+            //     console.log(after)
+            //     console.log(before)
+            //     this.initCalendar()
+            // }
         },
+
         created () {
             this.initCalendar()
         }
