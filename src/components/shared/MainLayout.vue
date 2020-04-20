@@ -3,9 +3,8 @@
         <NavigationBar/>
         <LeftSideMenu/>
     <v-content class="pt-md-6">
-        <v-container class="fill-height pa-0" fluid>
+        <v-container class="fill-height" fluid>
             <v-row align="center" justify="center" class="fill-height">
-<!--            <v-row class="ma-auto">-->
                 <router-view></router-view>
             </v-row>
         </v-container>
