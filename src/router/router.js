@@ -5,6 +5,7 @@ import Users from '@/components/admin/Users';
 import Organizations from '@/components/admin/Organizations';
 
 import PowerBI from "../components/powerbi/PowerBi";
+import CustomComponent from "../components/powerbi/CustomComponent";
 
 
 
@@ -32,6 +33,9 @@ const router =  new VueRouter({
                 },
                 {
                     path: 'bi/:id', name: 'bi', component: PowerBI, props:true
+                },
+                {
+                    path: 'gmap', name: 'gmap', component: CustomComponent
                 },
                 {
                     path: 'calendar', name: 'calendar', component: Calendar
