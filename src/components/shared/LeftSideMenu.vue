@@ -42,7 +42,8 @@
                     isPowerBI:false,
                     icon: 'mdi-alarm-light-outline',
                     text: 'Оперативный мониторинг',
-                    path:'gmap'
+                    path:'gmap',
+                    src:''
                 },
                 {
                     isPowerBI:true,
@@ -89,12 +90,15 @@
                 {
                     isPowerBI:false,
                     icon: 'mdi-home-map-marker ',
-                    text: 'Моинторинг СНП'
+                    text: 'Моинторинг СНП',
+                    src:''
                 },
                 {
                     isPowerBI:false,
                     icon: 'mdi-handshake',
-                    text: 'Государственно-частное партнерство'
+                    text: 'Государственно-частное партнерство',
+                    src:''
+
                 },
                 {
                     isPowerBI:true,
@@ -107,7 +111,8 @@
                 {
                     isPowerBI: false,
                     icon: 'mdi-apps',
-                    text: 'Строящиеся социальные объекты'
+                    text: 'Строящиеся социальные объекты',
+                    src:''
 
                 },
                 {
@@ -134,27 +139,26 @@
                 {
                     isPowerBI:false,
                     icon: 'mdi-tractor',
-                    text: 'Сельское хозяйство'
+                    text: 'Сельское хозяйство',
+                    src:''
                 },
                 {
                     isPowerBI:false,
                     icon: 'mdi-file-table-box-multiple-outline ',
-                    text: 'Государственноые программы' },
+                    text: 'Государственноые программы',
+                    src:''
+                },
                 {
                     isPowerBI:false,
                     icon: '',
-                    text: 'Задачи группы'
+                    text: 'Задачи группы',
+                    src:''
                 },
             ],
         }),
         methods:{
           routing(item){
-              if(item.isPowerBI){
                   this.$router.push({ name: item.path, params: { id: item.src } });
-              }
-              else{
-                  this.$router.push({ name: item.path });
-              }
           },
         },
         computed:{
