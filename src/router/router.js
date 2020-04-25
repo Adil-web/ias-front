@@ -15,6 +15,7 @@ import CustomComponent from "../components/powerbi/CustomComponent";
 import Vue from 'vue';
 import MainLayout from '@/components/shared/MainLayout';
 import Calendar from '@/components/shared/Calendar';
+import Calendar2 from '@/components/shared/Calendar2';
 import AdminLayout from "@/components/admin/AdminLayout";
 
 Vue.use(VueRouter);
@@ -55,6 +56,9 @@ const router =  new VueRouter({
                 },
                 {
                     path: 'calendar', name: 'calendar', component: Calendar
+                },
+                {
+                    path: 'calendar2', name: 'calendar2', component: Calendar2
                 },
 
             ]

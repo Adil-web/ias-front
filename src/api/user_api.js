@@ -10,6 +10,7 @@ const DELETE_USER='/api/test/delete';
 const RECOVERY_USER='/api/test/recovery';
 const REMOVE_USER='/api/test/remove';
 const GET_CURRENT_SESSION_USER='/api/auth/get_session_user';
+const GET_EVENTS='/api/test/events';
 
 export default {
 
@@ -46,6 +47,10 @@ export default {
     get_session_user(){
 
         return axios.get(GET_CURRENT_SESSION_USER,{ headers: authHeader() })
+    },
+
+    get_eventsApi(){
+        return axios.get(GET_EVENTS,{ headers: authHeader() })
     },
 
 
