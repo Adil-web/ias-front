@@ -56,22 +56,6 @@
                 </v-card>
             </v-dialog>
 
-            <v-dialog v-model="dialogDate" max-width="500">
-                <v-card>
-                    <v-container>
-                        <v-form @submit.prevent="addEvent">
-                            <v-text-field v-model="name" type="text" label="event name (required)"></v-text-field>
-                            <v-text-field v-model="details" type="text" label="detail"></v-text-field>
-<!--                            <v-text-field v-model="start" type="date" label="start (required)"></v-text-field>-->
-                            <v-text-field v-model="end" type="date" label="end (required)"></v-text-field>
-                            <v-btn type="submit" color="primary" class="mr-4" @click.stop="dialog = false">
-                                create event
-                            </v-btn>
-                        </v-form>
-                    </v-container>
-                </v-card>
-            </v-dialog>
-
             <v-sheet height="600">
                 <v-calendar
                         ref="calendar"
@@ -87,50 +71,138 @@
                         @change="updateRange"
                         locale="ru"
                 ></v-calendar>
-                <v-menu
-                        v-model="selectedOpen"
-                        :close-on-content-click="false"
-                        :activator="selectedElement"
-                        full-width
-                        offset-x
-                >
-                    <v-card color="grey lighten-4" :width="350" flat>
-                        <v-toolbar :color="selectedEvent.color" dark>
-                            <v-btn @click="deleteEvent(selectedEvent.id)" icon>
-                                <v-icon>mdi-delete</v-icon>
-                            </v-btn>
-                            <v-toolbar-title v-html="selectedEvent.name"></v-toolbar-title>
-                            <div class="flex-grow-1"></div>
-                        </v-toolbar>
+<!--                <v-menu-->
+<!--                        v-model="selectedOpen"-->
+<!--                        :close-on-content-click="false"-->
+<!--                        :activator="selectedElement"-->
+<!--                        full-width-->
+<!--                        offset-x-->
+<!--                >-->
+<!--                    <v-card color="grey lighten-4" :width="350" flat>-->
+<!--                        <v-toolbar :color="selectedEvent.color" dark class="align-items">-->
+<!--                            <v-toolbar-title v-html="selectedEvent.name"></v-toolbar-title>-->
+<!--                            <v-spacer></v-spacer>-->
+<!--                            <v-btn @click="deleteEvent(selectedEvent.id)" icon>-->
+<!--                                <v-icon>mdi-pencil</v-icon>-->
+<!--                            </v-btn>-->
+<!--                            <v-btn @click="deleteEvent(selectedEvent.id)" icon>-->
+<!--                                <v-icon>mdi-delete</v-icon>-->
+<!--                            </v-btn>-->
+<!--&lt;!&ndash;                            <div class="flex-grow-1"></div>&ndash;&gt;-->
+<!--                        </v-toolbar>-->
 
-                        <v-card-text>
-                            <form v-if="currentlyEditing !== selectedEvent.id">
-                                {{ selectedEvent.details }}
-                            </form>
-                            <form v-else>
-                                <textarea-autosize
-                                        v-model="selectedEvent.details"
-                                        type="text"
-                                        style="width: 100%"
-                                        :min-height="100"
-                                        placeholder="add note">
-                                </textarea-autosize>
-                            </form>
-                        </v-card-text>
+<!--                        <v-card-text>-->
+<!--                            <form v-if="currentlyEditing !== selectedEvent.id">-->
+<!--                                {{ selectedEvent.details }}-->
+<!--                            </form>-->
+<!--                            <form v-else>-->
 
-                        <v-card-actions>
-                            <v-btn text color="secondary" @click="selectedOpen = false">
-                                close
-                            </v-btn>
-                            <v-btn v-if="currentlyEditing !== selectedEvent.id" text @click.prevent="editEvent(selectedEvent)">
-                                edit
-                            </v-btn>
-                            <v-btn text v-else type="submit" @click.prevent="updateEvent(selectedEvent)">
-                                Save
-                            </v-btn>
-                        </v-card-actions>
+<!--                                <v-textarea-->
+<!--                                        v-model="selectedEvent.details"-->
+<!--                                        type="text"-->
+<!--                                        style="width: 100%"-->
+<!--                                        :min-height="100"-->
+<!--                                        placeholder="add note">-->
+<!--                                </v-textarea>-->
+<!--                            </form>-->
+<!--                        </v-card-text>-->
+
+<!--                        <v-card-actions>-->
+<!--                            <v-btn text color="secondary" @click="selectedOpen = false">-->
+<!--                                close-->
+<!--                            </v-btn>-->
+<!--                            <v-btn v-if="currentlyEditing !== selectedEvent.id" text @click.prevent="editEvent(selectedEvent)">-->
+<!--                                edit-->
+<!--                            </v-btn>-->
+<!--                            <v-btn text v-else type="submit" @click.prevent="updateEvent(selectedEvent)">-->
+<!--                                Save-->
+<!--                            </v-btn>-->
+<!--                        </v-card-actions>-->
+<!--                    </v-card>-->
+
+                <v-dialog v-model="dialog" max-width="500">
+                    <v-card>
+                        <v-container>
+                            <v-form @submit.prevent="addEvent">
+                                <v-text-field v-model="name" type="text" label="event name (required)"></v-text-field>
+                                <v-text-field v-model="details" type="text" label="detail"></v-text-field>
+                                <!--                            <v-text-field v-model="start" type="date" label="start (required)"></v-text-field>-->
+                                <v-text-field v-model="end" type="date" label="end (required)"></v-text-field>
+                                <v-btn type="submit" color="primary" class="mr-4" @click.stop="dialog = false">
+                                    create event
+                                </v-btn>
+                            </v-form>
+                        </v-container>
                     </v-card>
-                </v-menu>
+                </v-dialog>
+                    <template>
+                        <v-row align="center">
+                            <v-row justify="space-around">
+                                <v-switch v-model="valid" class="ma-4" label="Valid" readonly></v-switch>
+                                <v-switch v-model="lazy" class="ma-4" label="Lazy"></v-switch>
+                            </v-row>
+                            <v-form
+                                    ref="form"
+                                    v-model="valid"
+                                    :lazy-validation="lazy"
+                            >
+                                <v-text-field
+                                        v-model="name"
+                                        :counter="10"
+                                        :rules="nameRules"
+                                        label="Name"
+                                        required
+                                ></v-text-field>
+
+                                <v-text-field
+                                        v-model="email"
+                                        :rules="emailRules"
+                                        label="E-mail"
+                                        required
+                                ></v-text-field>
+
+                                <v-select
+                                        v-model="select"
+                                        :items="items"
+                                        :rules="[v => !!v || 'Item is required']"
+                                        label="Item"
+                                        required
+                                ></v-select>
+
+                                <v-checkbox
+                                        v-model="checkbox"
+                                        :rules="[v => !!v || 'You must agree to continue!']"
+                                        label="Do you agree?"
+                                        required
+                                ></v-checkbox>
+
+                                <v-btn
+                                        :disabled="!valid"
+                                        color="success"
+                                        class="mr-4"
+                                        @click="validate"
+                                >
+                                    Validate
+                                </v-btn>
+
+                                <v-btn
+                                        color="error"
+                                        class="mr-4"
+                                        @click="reset"
+                                >
+                                    Reset Form
+                                </v-btn>
+
+                                <v-btn
+                                        color="warning"
+                                        @click="resetValidation"
+                                >
+                                    Reset Validation
+                                </v-btn>
+                            </v-form>
+                        </v-row>
+                    </template>
+<!--                </v-menu>-->
             </v-sheet>
         </v-col>
     </v-row>
@@ -154,7 +226,8 @@
             details: null,
             start: null,
             end: null,
-            color: '#1976D2', // default event color
+            redColor: '#F44336',
+            greenColor: '#4CAF50',
             currentlyEditing: null,
             selectedEvent: {},
             selectedElement: null,
@@ -197,13 +270,8 @@
         methods: {
 
             getEvents () {
-                let snapshot = user_api.get_eventsApi().then(res=>{
+                 user_api.get_eventsApi().then( (res)=>{
                     this.events = res.data;
-                    console.log(this.events[0])
-                    console.log(this.events[0])
-                    console.log(this.events[0])
-                    console.log(this.events[0])
-
                 });
 
             },
@@ -217,7 +285,7 @@
                 this.type = 'day'
             },
             getEventColor (event) {
-                return event.color
+                return event.completed? event.color = this.greenColor:event.color = this.redColor
             },
             setToday () {
                 this.focus = this.today
@@ -232,18 +300,13 @@
 
             addEvent () {
                 if (this.name && this.end) {
-
-                    console.log(this.end)
-                    console.log(dayjs(this.end))
-                    console.log(dayjs(this.end).format('YYYY-MM-DD'))
-                    console.log(new Date(this.end))
-
+                    // this.start = new Date(this.end).toISOString().substring(0,10);
+                    // this.end =  new Date(this.end).toISOString().substring(0,10);
                      user_api.addEventApi(
                          {
                              name: this.name,
                              details: this.details,
-                             start: dayjs(this.end).format('YYYY-MM-DD') ,
-                             expire_date: this.end
+                             end: this.end
                         }
                      );
                     this.name = '';

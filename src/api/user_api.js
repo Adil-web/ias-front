@@ -58,6 +58,10 @@ export default {
         return axios.post(ADD_EVENT,event,{ headers: authHeader() })
     },
 
+    test(date){
+        return axios.post('/api/test/date',date,{ headers: authHeader() })
+    },
+
 
 
 
