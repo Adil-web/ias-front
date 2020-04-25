@@ -3,7 +3,10 @@
         <v-col>
             <v-sheet height="64">
                 <v-toolbar flat color="white">
-                    <v-btn outlined class="mr-4" color="grey darken-2" @click="setToday">
+                    <v-btn color="primary" dark @click.stop="dialog = true">
+                        New Event
+                    </v-btn>
+                    <v-btn outlined class="mx-4" @click="setToday">
                         Today
                     </v-btn>
                     <v-btn fab text small color="grey darken-2" @click="prev">
@@ -36,6 +39,39 @@
                     </v-menu>
                 </v-toolbar>
             </v-sheet>
+
+            <v-dialog v-model="dialog" max-width="500">
+                <v-card>
+                    <v-container>
+                        <v-form @submit.prevent="addEvent">
+                            <v-text-field v-model="name" type="text" label="event name (required)"></v-text-field>
+                            <v-text-field v-model="details" type="text" label="detail"></v-text-field>
+<!--                            <v-text-field v-model="start" type="date" label="start (required)"></v-text-field>-->
+                            <v-text-field v-model="end" type="date" label="end (required)"></v-text-field>
+                            <v-btn type="submit" color="primary" class="mr-4" @click.stop="dialog = false">
+                                create event
+                            </v-btn>
+                        </v-form>
+                    </v-container>
+                </v-card>
+            </v-dialog>
+
+            <v-dialog v-model="dialogDate" max-width="500">
+                <v-card>
+                    <v-container>
+                        <v-form @submit.prevent="addEvent">
+                            <v-text-field v-model="name" type="text" label="event name (required)"></v-text-field>
+                            <v-text-field v-model="details" type="text" label="detail"></v-text-field>
+<!--                            <v-text-field v-model="start" type="date" label="start (required)"></v-text-field>-->
+                            <v-text-field v-model="end" type="date" label="end (required)"></v-text-field>
+                            <v-btn type="submit" color="primary" class="mr-4" @click.stop="dialog = false">
+                                create event
+                            </v-btn>
+                        </v-form>
+                    </v-container>
+                </v-card>
+            </v-dialog>
+
             <v-sheet height="600">
                 <v-calendar
                         ref="calendar"
@@ -55,39 +91,42 @@
                         v-model="selectedOpen"
                         :close-on-content-click="false"
                         :activator="selectedElement"
+                        full-width
                         offset-x
                 >
-                    <v-card
-                            color="grey lighten-4"
-                            min-width="350px"
-                            flat
-                    >
-                        <v-toolbar
-                                :color="selectedEvent.color"
-                                dark
-                        >
-                            <v-btn icon>
-                                <v-icon>mdi-pencil</v-icon>
+                    <v-card color="grey lighten-4" :width="350" flat>
+                        <v-toolbar :color="selectedEvent.color" dark>
+                            <v-btn @click="deleteEvent(selectedEvent.id)" icon>
+                                <v-icon>mdi-delete</v-icon>
                             </v-btn>
                             <v-toolbar-title v-html="selectedEvent.name"></v-toolbar-title>
-                            <v-spacer></v-spacer>
-                            <v-btn icon>
-                                <v-icon>mdi-heart</v-icon>
-                            </v-btn>
-                            <v-btn icon>
-                                <v-icon>mdi-dots-vertical</v-icon>
-                            </v-btn>
+                            <div class="flex-grow-1"></div>
                         </v-toolbar>
+
                         <v-card-text>
-                            <span v-html="selectedEvent.details"></span>
+                            <form v-if="currentlyEditing !== selectedEvent.id">
+                                {{ selectedEvent.details }}
+                            </form>
+                            <form v-else>
+                                <textarea-autosize
+                                        v-model="selectedEvent.details"
+                                        type="text"
+                                        style="width: 100%"
+                                        :min-height="100"
+                                        placeholder="add note">
+                                </textarea-autosize>
+                            </form>
                         </v-card-text>
+
                         <v-card-actions>
-                            <v-btn
-                                    text
-                                    color="secondary"
-                                    @click="selectedOpen = false"
-                            >
-                                Cancel
+                            <v-btn text color="secondary" @click="selectedOpen = false">
+                                close
+                            </v-btn>
+                            <v-btn v-if="currentlyEditing !== selectedEvent.id" text @click.prevent="editEvent(selectedEvent)">
+                                edit
+                            </v-btn>
+                            <v-btn text v-else type="submit" @click.prevent="updateEvent(selectedEvent)">
+                                Save
                             </v-btn>
                         </v-card-actions>
                     </v-card>
@@ -98,6 +137,7 @@
 </template>
 
 <script>
+    import dayjs from 'dayjs'
     import user_api from "../../api/user_api";
 
     export default {
@@ -108,14 +148,21 @@
                 month: 'Month',
                 day: 'Day'
             },
+
+
+            name: null,
+            details: null,
             start: null,
             end: null,
+            color: '#1976D2', // default event color
+            currentlyEditing: null,
             selectedEvent: {},
             selectedElement: null,
             selectedOpen: false,
             events: [],
-            colors: ['blue', 'indigo', 'deep-purple', 'cyan', 'green', 'orange', 'grey darken-1'],
-            names: ['Meeting', 'Holiday', 'PTO', 'Travel', 'Event', 'Birthday', 'Conference', 'Party'],
+            dialog: false,
+            dialogDate: false
+
         }),
         computed: {
             title () {
@@ -142,16 +189,29 @@
             },
         },
         mounted () {
-            this.$refs.calendar.checkChange()
+            this.getEvents();
+            // this.$refs.calendar.checkChange()
         },
 
-        created(){
-            user_api.get_eventsApi().then((res)=>{
-                console.log(res)
-            });
-        },
 
         methods: {
+
+            getEvents () {
+                let snapshot = user_api.get_eventsApi().then(res=>{
+                    this.events = res.data;
+                    console.log(this.events[0])
+                    console.log(this.events[0])
+                    console.log(this.events[0])
+                    console.log(this.events[0])
+
+                });
+
+            },
+            setDialogDate( { date }) {
+                this.dialogDate = true
+                this.focus = date
+            },
+
             viewDay ({ date }) {
                 this.focus = date;
                 this.type = 'day'
@@ -168,6 +228,48 @@
             next () {
                 this.$refs.calendar.next()
             },
+
+
+            addEvent () {
+                if (this.name && this.end) {
+
+                    console.log(this.end)
+                    console.log(dayjs(this.end))
+                    console.log(dayjs(this.end).format('YYYY-MM-DD'))
+                    console.log(new Date(this.end))
+
+                     user_api.addEventApi(
+                         {
+                             name: this.name,
+                             details: this.details,
+                             start: dayjs(this.end).format('YYYY-MM-DD') ,
+                             expire_date: this.end
+                        }
+                     );
+                    this.name = '';
+                    this.details = '';
+                    this.end = '';
+                } else {
+                    alert('You must enter event name, start, and end time')
+                }
+            },
+            editEvent (ev) {
+                this.currentlyEditing = ev.id
+            },
+            async updateEvent (ev) {
+                await db.collection('calEvent').doc(this.currentlyEditing).update({
+                    details: ev.details
+                })
+                this.selectedOpen = false,
+                    this.currentlyEditing = null
+            },
+            async deleteEvent (ev) {
+                await db.collection("calEvent").doc(ev).delete()
+                this.selectedOpen = false,
+                    this.getEvents()
+            },
+
+
             showEvent ({ nativeEvent, event }) {
                 const open = () => {
                     this.selectedEvent = event
@@ -183,37 +285,10 @@
                 }
                 nativeEvent.stopPropagation()
             },
+
             updateRange ({ start, end }) {
-                // const events = []
-                //
-                // const min = new Date(`${start.date}T00:00:00`)
-                // const max = new Date(`${end.date}T23:59:59`)
-                // const days = (max.getTime() - min.getTime()) / 86400000
-                // const eventCount = this.rnd(days, days + 20)
-                //
-                // for (let i = 0; i < eventCount; i++) {
-                //     const allDay = this.rnd(0, 3) === 0
-                //     const firstTimestamp = this.rnd(min.getTime(), max.getTime())
-                //     const first = new Date(firstTimestamp - (firstTimestamp % 900000))
-                //     const secondTimestamp = this.rnd(2, allDay ? 288 : 8) * 900000
-                //     const second = new Date(first.getTime() + secondTimestamp)
-                //
-                //     events.push({
-                //         name: this.names[this.rnd(0, this.names.length - 1)],
-                //         start: this.formatDate(first, !allDay),
-                //         end: this.formatDate(second, !allDay),
-                //         color: this.colors[this.rnd(0, this.colors.length - 1)],
-                //     })
-                // }
-
-
                 this.start = start
                 this.end = end
-                this.events = events
-                console.log(start);
-                console.log(end);
-                console.log(events);
-
             },
             nth (d) {
                 return d > 3 && d < 21

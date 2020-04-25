@@ -11,6 +11,7 @@ const RECOVERY_USER='/api/test/recovery';
 const REMOVE_USER='/api/test/remove';
 const GET_CURRENT_SESSION_USER='/api/auth/get_session_user';
 const GET_EVENTS='/api/test/events';
+const ADD_EVENT='/api/test/add_event';
 
 export default {
 
@@ -52,6 +53,13 @@ export default {
     get_eventsApi(){
         return axios.get(GET_EVENTS,{ headers: authHeader() })
     },
+
+    addEventApi(event){
+        return axios.post(ADD_EVENT,event,{ headers: authHeader() })
+    },
+
+
+
 
 
 
