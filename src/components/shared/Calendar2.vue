@@ -266,9 +266,8 @@
             menu1: false,
 
 
-            files:[]
-
-
+            files:[],
+            eventFiles:[]
 
         }),
         computed: {
@@ -321,8 +320,6 @@
                             Vue.set(this.events, this.events.findIndex(item=>item.id === rs.data.id), rs.data );
                             this.setFocus(rs.data.end);
                             this.eventDataReset();
-                            console.log(this.files)
-                            console.log(this.files.length)
                             if(this.files.length!==0){
                                 this.upload();
                             }
@@ -395,7 +392,6 @@
             },
 
             upload(){
-
                 let outer = this;
                 return new Promise((resolve, reject) => {
                     let formData = new FormData();
@@ -404,16 +400,24 @@
                                 formData.append('file', item);
                             });
                             file_api.uploadFiles(formData).then(rs=>{
-                                alert("Успешно Загружены")
+
                             });
                         }
-
-
 
                         else{
                             formData.append("file",outer.files[0]);
                             file_api.uploadFile(formData).then(rs=>{
-                                alert("Загружено")
+                                console.log(rs.data)
+                                file_api.downloadFile(rs.data.fileName).then(rs2=>{
+                                    console.log(rs2)
+                                    const url = window.URL.createObjectURL(new Blob([rs2.data]));
+                                    const link = document.createElement('a');
+                                    link.href = url;
+                                    link.setAttribute('download', 'file.pdf'); //or any other extension
+                                    document.body.appendChild(link);
+                                    link.click();
+
+                                })
                             });
                         }
                 })
