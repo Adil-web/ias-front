@@ -40,21 +40,120 @@
                 </v-toolbar>
             </v-sheet>
 
-            <v-dialog v-model="dialog" max-width="500">
-                <v-card>
+            <v-dialog v-model="dialog" width="1000">
+                <v-card height="400">
                     <v-container>
-                        <v-form @submit.prevent="addEvent">
-                            <v-text-field v-model="name" type="text" label="event name (required)"></v-text-field>
-                            <v-text-field v-model="details" type="text" label="detail"></v-text-field>
-<!--                            <v-text-field v-model="start" type="date" label="start (required)"></v-text-field>-->
-                            <v-text-field v-model="end" type="date" label="end (required)"></v-text-field>
-                            <v-btn type="submit" color="primary" class="mr-4" @click.stop="dialog = false">
-                                create event
-                            </v-btn>
-                        </v-form>
+                        <template>
+                            <v-row align="stretch">
+                                <v-col>
+                                    <v-form
+                                            @submit.prevent="addEvent"
+                                            ref="form"
+                                            v-model="valid"
+                                            :lazy-validation="lazy"
+                                    >
+                                        <v-text-field
+                                                v-model="name"
+                                                :counter="10"
+                                                :rules="nameRules"
+                                                label="Name"
+                                                required
+                                        ></v-text-field>
+
+                                        <v-text-field
+                                                v-model="details"
+                                                label="Описание"
+                                                required
+                                        ></v-text-field>
+
+                                        <v-menu
+                                                ref="menu1"
+                                                v-model="menu1"
+                                                :close-on-content-click="false"
+                                                transition="scale-transition"
+                                                offset-y
+                                                max-width="290px"
+                                                min-width="290px"
+                                        >
+                                            <template v-slot:activator="{ on }">
+                                                <v-text-field
+                                                        v-model="dateFormatted"
+                                                        label="Date"
+                                                        hint="MM/DD/YYYY format"
+                                                        persistent-hint
+                                                        prepend-icon="mdi-calendar-import"
+                                                        @blur="end = parseDate(dateFormatted)"
+                                                        v-on="on"
+                                                ></v-text-field>
+                                            </template>
+                                            <v-date-picker v-model="end" no-title @input="menu1 = false"></v-date-picker>
+                                        </v-menu>
+
+                                        <v-checkbox
+                                                v-model="completed"
+                                                label="Выполнено?"
+                                        ></v-checkbox>
+
+
+                                        <v-btn
+                                                :disabled="!valid"
+                                                color="success"
+                                                class="mr-4"
+                                                type="submit"
+                                                @click.stop="dialog = false"
+
+                                        >
+                                            добавить
+                                        </v-btn>
+
+                                        <v-btn
+                                                color="error"
+                                                class="mr-4"
+                                                @click="reset"
+                                        >
+                                            Reset Form
+                                        </v-btn>
+
+                                        <v-btn
+                                                color="warning"
+                                                @click.stop="dialog=false"
+                                        >
+                                            Закрыть
+                                        </v-btn>
+
+                                    </v-form>
+
+                                </v-col>
+                                <v-col>
+                                    <v-file-input
+                                            v-model="files"
+                                            placeholder="Upload your documents"
+                                            label="File input"
+                                            multiple
+                                            prepend-icon="mdi-paperclip"
+                                    >
+                                        <template v-slot:selection="{ text }">
+                                            <v-chip
+                                                    small
+                                                    label
+                                                    color="primary"
+                                            >
+                                                {{ text }}
+                                            </v-chip>
+                                        </template>
+                                    </v-file-input>
+
+<!--                                    <v-switch v-model="valid" class="ma-4" label="Valid" readonly></v-switch>-->
+<!--                                    <v-switch v-model="lazy" class="ma-4" label="Lazy"></v-switch>-->
+                                </v-col>
+                            </v-row>
+                        </template>
                     </v-container>
                 </v-card>
             </v-dialog>
+<!--            <v-dialog v-model="dialog" max-width="500">-->
+<!--                -->
+<!--            </v-dialog>-->
 
             <v-sheet height="600">
                 <v-calendar
@@ -120,88 +219,8 @@
 <!--                        </v-card-actions>-->
 <!--                    </v-card>-->
 
-                <v-dialog v-model="dialog" max-width="500">
-                    <v-card>
-                        <v-container>
-                            <v-form @submit.prevent="addEvent">
-                                <v-text-field v-model="name" type="text" label="event name (required)"></v-text-field>
-                                <v-text-field v-model="details" type="text" label="detail"></v-text-field>
-                                <!--                            <v-text-field v-model="start" type="date" label="start (required)"></v-text-field>-->
-                                <v-text-field v-model="end" type="date" label="end (required)"></v-text-field>
-                                <v-btn type="submit" color="primary" class="mr-4" @click.stop="dialog = false">
-                                    create event
-                                </v-btn>
-                            </v-form>
-                        </v-container>
-                    </v-card>
-                </v-dialog>
-                    <template>
-                        <v-row align="center">
-                            <v-row justify="space-around">
-                                <v-switch v-model="valid" class="ma-4" label="Valid" readonly></v-switch>
-                                <v-switch v-model="lazy" class="ma-4" label="Lazy"></v-switch>
-                            </v-row>
-                            <v-form
-                                    ref="form"
-                                    v-model="valid"
-                                    :lazy-validation="lazy"
-                            >
-                                <v-text-field
-                                        v-model="name"
-                                        :counter="10"
-                                        :rules="nameRules"
-                                        label="Name"
-                                        required
-                                ></v-text-field>
 
-                                <v-text-field
-                                        v-model="email"
-                                        :rules="emailRules"
-                                        label="E-mail"
-                                        required
-                                ></v-text-field>
 
-                                <v-select
-                                        v-model="select"
-                                        :items="items"
-                                        :rules="[v => !!v || 'Item is required']"
-                                        label="Item"
-                                        required
-                                ></v-select>
-
-                                <v-checkbox
-                                        v-model="checkbox"
-                                        :rules="[v => !!v || 'You must agree to continue!']"
-                                        label="Do you agree?"
-                                        required
-                                ></v-checkbox>
-
-                                <v-btn
-                                        :disabled="!valid"
-                                        color="success"
-                                        class="mr-4"
-                                        @click="validate"
-                                >
-                                    Validate
-                                </v-btn>
-
-                                <v-btn
-                                        color="error"
-                                        class="mr-4"
-                                        @click="reset"
-                                >
-                                    Reset Form
-                                </v-btn>
-
-                                <v-btn
-                                        color="warning"
-                                        @click="resetValidation"
-                                >
-                                    Reset Validation
-                                </v-btn>
-                            </v-form>
-                        </v-row>
-                    </template>
 <!--                </v-menu>-->
             </v-sheet>
         </v-col>
@@ -221,11 +240,18 @@
                 day: 'Day'
             },
 
-
+            valid: true,
+            lazy:false,
+            nameRules: [
+                v => !!v || 'Name is required',
+                v => (v && v.length <= 10) || 'Name must be less than 10 characters',
+            ],
             name: null,
             details: null,
             start: null,
             end: null,
+            completed:false,
+
             redColor: '#F44336',
             greenColor: '#4CAF50',
             currentlyEditing: null,
@@ -233,8 +259,10 @@
             selectedElement: null,
             selectedOpen: false,
             events: [],
+
+            menu1:false,
             dialog: false,
-            dialogDate: false
+            dateFormatted:null
 
         }),
         computed: {
@@ -269,6 +297,13 @@
 
         methods: {
 
+            validate () {
+                this.$refs.form.validate()
+            },
+            reset () {
+                this.$refs.form.reset()
+            },
+
             getEvents () {
                  user_api.get_eventsApi().then( (res)=>{
                     this.events = res.data;
@@ -300,18 +335,18 @@
 
             addEvent () {
                 if (this.name && this.end) {
-                    // this.start = new Date(this.end).toISOString().substring(0,10);
-                    // this.end =  new Date(this.end).toISOString().substring(0,10);
                      user_api.addEventApi(
                          {
                              name: this.name,
                              details: this.details,
-                             end: this.end
-                        }
+                             end: this.end,
+                             completed: this.completed
+                         }
                      );
                     this.name = '';
                     this.details = '';
                     this.end = '';
+                    this.completed = false
                 } else {
                     alert('You must enter event name, start, and end time')
                 }
@@ -361,10 +396,24 @@
             rnd (a, b) {
                 return Math.floor((b - a + 1) * Math.random()) + a
             },
-            formatDate (a, withTime) {
-                return withTime
-                    ? `${a.getFullYear()}-${a.getMonth() + 1}-${a.getDate()} ${a.getHours()}:${a.getMinutes()}`
-                    : `${a.getFullYear()}-${a.getMonth() + 1}-${a.getDate()}`
+
+
+            formatDate (date) {
+                if (!date) return null
+
+                const [year, month, day] = date.split('-')
+                return `${month}/${day}/${year}`
+            },
+            parseDate (date) {
+                if (!date) return null
+
+                const [month, day, year] = date.split('/')
+                return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`
+            },
+        },
+        watch: {
+            end (val) {
+                this.dateFormatted = this.formatDate(this.end)
             },
         },
     }
