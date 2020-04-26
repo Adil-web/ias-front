@@ -139,6 +139,7 @@
                                             label="File input"
                                             multiple
                                             prepend-icon="mdi-paperclip"
+                                            @change="fileMethod"
                                     >
                                         <template v-slot:selection="{ text }">
                                             <v-chip
@@ -238,6 +239,7 @@
     import Vue from 'vue'
     import dayjs from 'dayjs'
     import user_api from "../../api/user_api";
+    import file_api from "../../api/file_api";
 
     export default {
         data: () => ({
@@ -261,7 +263,10 @@
             valid: true,
             lazy:false,
             rules: [ v => !!v || 'Field is required'],
-            menu1: false
+            menu1: false,
+
+
+            files:[]
 
 
 
@@ -316,6 +321,11 @@
                             Vue.set(this.events, this.events.findIndex(item=>item.id === rs.data.id), rs.data );
                             this.setFocus(rs.data.end);
                             this.eventDataReset();
+                            console.log(this.files)
+                            console.log(this.files.length)
+                            if(this.files.length!==0){
+                                this.upload();
+                            }
                         });
                 }
                 else{
@@ -324,6 +334,10 @@
                             this.events.push(rs.data);
                             this.setFocus(rs.data.end);
                             this.eventDataReset();
+                        }).then(()=>{
+                            if(this.files.length!==0){
+                                this.upload();
+                            }
                         });
                 }
             },
@@ -380,6 +394,30 @@
                 return Math.floor((b - a + 1) * Math.random()) + a
             },
 
+            upload(){
+
+                let outer = this;
+                return new Promise((resolve, reject) => {
+                    let formData = new FormData();
+                        if( outer.files.length > 1){
+                            outer.files.forEach((item)=>{
+                                formData.append('file', item);
+                            });
+                            file_api.uploadFiles(formData).then(rs=>{
+                                alert("Успешно Загружены")
+                            });
+                        }
+
+
+
+                        else{
+                            formData.append("file",outer.files[0]);
+                            file_api.uploadFile(formData).then(rs=>{
+                                alert("Загружено")
+                            });
+                        }
+                })
+            },
         },
     }
 </script>
