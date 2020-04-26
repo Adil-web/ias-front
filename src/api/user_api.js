@@ -12,6 +12,7 @@ const REMOVE_USER='/api/test/remove';
 const GET_CURRENT_SESSION_USER='/api/auth/get_session_user';
 const GET_EVENTS='/api/test/events';
 const ADD_EVENT='/api/test/add_event';
+const EDIT_EVENT='/api/test/edit_event';
 
 export default {
 
@@ -56,6 +57,10 @@ export default {
 
     addEventApi(event){
         return axios.post(ADD_EVENT,event,{ headers: authHeader() })
+    },
+
+    editEventApi(event){
+        return axios.post(EDIT_EVENT,event,{ headers: authHeader() })
     },
 
     test(date){

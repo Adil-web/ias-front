@@ -3,7 +3,7 @@
         <v-col>
             <v-sheet height="64">
                 <v-toolbar flat color="white">
-                    <v-btn color="primary" dark @click.stop="dialog = true">
+                    <v-btn color="primary" dark @click.stop="dialog=true">
                         New Event
                     </v-btn>
                     <v-btn outlined class="mx-4" @click="setToday">
@@ -47,22 +47,23 @@
                             <v-row align="stretch">
                                 <v-col>
                                     <v-form
-                                            @submit.prevent="addEvent"
+                                            @submit.prevent="saveEvent"
                                             ref="form"
                                             v-model="valid"
                                             :lazy-validation="lazy"
                                     >
                                         <v-text-field
-                                                v-model="name"
-                                                :counter="10"
-                                                :rules="nameRules"
+                                                v-model="event.name"
+                                                :rules="rules"
                                                 label="Name"
                                                 required
+                                                :readonly="event.id"
                                         ></v-text-field>
 
                                         <v-text-field
-                                                v-model="details"
+                                                v-model="event.description"
                                                 label="Описание"
+                                                :rules="rules"
                                                 required
                                         ></v-text-field>
 
@@ -70,6 +71,7 @@
                                                 ref="menu1"
                                                 v-model="menu1"
                                                 :close-on-content-click="false"
+                                                :return-value.sync="event.end"
                                                 transition="scale-transition"
                                                 offset-y
                                                 max-width="290px"
@@ -77,20 +79,26 @@
                                         >
                                             <template v-slot:activator="{ on }">
                                                 <v-text-field
-                                                        v-model="dateFormatted"
+                                                        v-model="event.end"
                                                         label="Date"
                                                         hint="MM/DD/YYYY format"
                                                         persistent-hint
                                                         prepend-icon="mdi-calendar-import"
-                                                        @blur="end = parseDate(dateFormatted)"
+                                                        readonly
+                                                        required
+                                                        :rules="rules"
                                                         v-on="on"
                                                 ></v-text-field>
                                             </template>
-                                            <v-date-picker v-model="end" no-title @input="menu1 = false"></v-date-picker>
+                                            <v-date-picker v-model="event.end" no-title scrollable>
+                                                <v-spacer></v-spacer>
+                                                <v-btn text color="primary" @click="menu1 = false">Cancel</v-btn>
+                                                <v-btn text color="primary" @click="$refs.menu1.save(event.end)">OK</v-btn>
+                                            </v-date-picker>
                                         </v-menu>
 
                                         <v-checkbox
-                                                v-model="completed"
+                                                v-model="event.completed"
                                                 label="Выполнено?"
                                         ></v-checkbox>
 
@@ -111,12 +119,12 @@
                                                 class="mr-4"
                                                 @click="reset"
                                         >
-                                            Reset Form
+                                            Сбросить форму
                                         </v-btn>
 
                                         <v-btn
                                                 color="warning"
-                                                @click.stop="dialog=false"
+                                                @click.stop="closeEventDialog"
                                         >
                                             Закрыть
                                         </v-btn>
@@ -162,7 +170,6 @@
                         color="primary"
                         :events="events"
                         :event-color="getEventColor"
-                        :now="today"
                         :type="type"
                         @click:event="showEvent"
                         @click:more="viewDay"
@@ -228,11 +235,14 @@
 </template>
 
 <script>
+    import Vue from 'vue'
     import dayjs from 'dayjs'
     import user_api from "../../api/user_api";
 
     export default {
         data: () => ({
+            start: null,
+            end: null,
             focus: '',
             type: 'month',
             typeToLabel: {
@@ -240,37 +250,29 @@
                 day: 'Day'
             },
 
-            valid: true,
-            lazy:false,
-            nameRules: [
-                v => !!v || 'Name is required',
-                v => (v && v.length <= 10) || 'Name must be less than 10 characters',
-            ],
-            name: null,
-            details: null,
-            start: null,
-            end: null,
-            completed:false,
 
             redColor: '#F44336',
             greenColor: '#4CAF50',
-            currentlyEditing: null,
-            selectedEvent: {},
-            selectedElement: null,
-            selectedOpen: false,
+            event: {},
             events: [],
 
-            menu1:false,
+
             dialog: false,
-            dateFormatted:null
+            valid: true,
+            lazy:false,
+            rules: [ v => !!v || 'Field is required'],
+            menu1: false
+
+
 
         }),
         computed: {
             title () {
-                const { start, end } = this
+                const { start, end } = this;
                 if (!start || !end) {
                     return ''
                 }
+
                 const startMonth = this.monthFormatter(start)
                 const startYear = start.year;
                 const startDay = start.day + this.nth(start.day)
@@ -289,41 +291,68 @@
                 })
             },
         },
-        mounted () {
+        created () {
             this.getEvents();
-            // this.$refs.calendar.checkChange()
+        },
+        mounted () {
+            this.$refs.calendar.checkChange();
         },
 
 
         methods: {
-
-            validate () {
-                this.$refs.form.validate()
+            closeEventDialog(){
+              this.dialog =false;
+              this.eventDataReset();
             },
+
+            eventDataReset(){
+                this.event = {};
+            },
+
+            saveEvent () {
+                if(this.event.id){
+                    user_api.editEventApi(this.event)
+                        .then((rs)=>{
+                            Vue.set(this.events, this.events.findIndex(item=>item.id === rs.data.id), rs.data );
+                            this.setFocus(rs.data.end);
+                            this.eventDataReset();
+                        });
+                }
+                else{
+                    user_api.addEventApi(this.event)
+                        .then((rs)=>{
+                            this.events.push(rs.data);
+                            this.setFocus(rs.data.end);
+                            this.eventDataReset();
+                        });
+                }
+            },
+
+
+
             reset () {
                 this.$refs.form.reset()
             },
 
             getEvents () {
-                 user_api.get_eventsApi().then( (res)=>{
+                 user_api.get_eventsApi().then((res)=>{
                     this.events = res.data;
                 });
+            },
 
-            },
-            setDialogDate( { date }) {
-                this.dialogDate = true
-                this.focus = date
-            },
 
             viewDay ({ date }) {
-                this.focus = date;
+                this.setFocus(date);
                 this.type = 'day'
             },
             getEventColor (event) {
                 return event.completed? event.color = this.greenColor:event.color = this.redColor
             },
             setToday () {
-                this.focus = this.today
+                this.focus = new Date().toISOString().substr(0,10)
+            },
+            setFocus(date){
+                this.focus = date;
             },
             prev () {
                 this.$refs.calendar.prev()
@@ -332,62 +361,16 @@
                 this.$refs.calendar.next()
             },
 
-
-            addEvent () {
-                if (this.name && this.end) {
-                     user_api.addEventApi(
-                         {
-                             name: this.name,
-                             details: this.details,
-                             end: this.end,
-                             completed: this.completed
-                         }
-                     );
-                    this.name = '';
-                    this.details = '';
-                    this.end = '';
-                    this.completed = false
-                } else {
-                    alert('You must enter event name, start, and end time')
-                }
-            },
-            editEvent (ev) {
-                this.currentlyEditing = ev.id
-            },
-            async updateEvent (ev) {
-                await db.collection('calEvent').doc(this.currentlyEditing).update({
-                    details: ev.details
-                })
-                this.selectedOpen = false,
-                    this.currentlyEditing = null
-            },
-            async deleteEvent (ev) {
-                await db.collection("calEvent").doc(ev).delete()
-                this.selectedOpen = false,
-                    this.getEvents()
-            },
-
-
-            showEvent ({ nativeEvent, event }) {
-                const open = () => {
-                    this.selectedEvent = event
-                    this.selectedElement = nativeEvent.target
-                    setTimeout(() => this.selectedOpen = true, 10)
-                };
-
-                if (this.selectedOpen) {
-                    this.selectedOpen = false
-                    setTimeout(open, 10)
-                } else {
-                    open()
-                }
-                nativeEvent.stopPropagation()
+            showEvent ({ event }) {
+                this.event = Object.assign({}, event)
+                this.dialog=true;
             },
 
             updateRange ({ start, end }) {
-                this.start = start
-                this.end = end
+                this.start = start;
+                this.end = end;
             },
+
             nth (d) {
                 return d > 3 && d < 21
                     ? 'th'
@@ -397,24 +380,6 @@
                 return Math.floor((b - a + 1) * Math.random()) + a
             },
 
-
-            formatDate (date) {
-                if (!date) return null
-
-                const [year, month, day] = date.split('-')
-                return `${month}/${day}/${year}`
-            },
-            parseDate (date) {
-                if (!date) return null
-
-                const [month, day, year] = date.split('/')
-                return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`
-            },
-        },
-        watch: {
-            end (val) {
-                this.dateFormatted = this.formatDate(this.end)
-            },
         },
     }
 </script>
