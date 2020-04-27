@@ -5,8 +5,8 @@ import authHeader from './data-service';
 
 const UPLOAD_FILE='/api/test/uploadFile';
 const UPLOAD_FILES='/api/test/uploadMultipleFiles';
-const GET_FILE='/api/test/downloadFile';
-// const RECOVERY_USER='/api/test/recovery';
+const DOWNLOAD_FILE='/api/test/downloadFile';
+const GET_FILES='/api/test/get_files';
 // const REMOVE_USER='/api/test/remove';
 // const GET_CURRENT_SESSION_USER='/api/auth/get_session_user';
 // const GET_EVENTS='/api/test/events';
@@ -14,6 +14,11 @@ const GET_FILE='/api/test/downloadFile';
 // const EDIT_EVENT='/api/test/edit_event';
 
 export default {
+
+
+    getFiles(id) {
+        return axios.get(GET_FILES+'?id='+id,{ headers: authHeader() })
+    },
 
     uploadFile(file) {
         let h = authHeader();
@@ -30,7 +35,14 @@ export default {
     downloadFile(fileName) {
         let h = authHeader();
         h["Content-Type"]= "multipart/form-data";
-        return axios.get(GET_FILE+'/'+fileName,{responseType: 'blob', headers: h})
+        axios.get(DOWNLOAD_FILE+'/'+fileName,{responseType: 'blob', headers: h}).then(rs2=>{
+            const url = window.URL.createObjectURL(new Blob([rs2.data]));
+            const link = document.createElement('a');
+            link.href = url;
+            link.setAttribute('download', 'file.pdf'); //or any other extension
+            document.body.appendChild(link);
+            link.click();
+        })
     },
 
 

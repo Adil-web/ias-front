@@ -139,7 +139,7 @@
                                             label="File input"
                                             multiple
                                             prepend-icon="mdi-paperclip"
-                                            @change="fileMethod"
+                                            @change="filesChange"
                                     >
                                         <template v-slot:selection="{ text }">
                                             <v-chip
@@ -152,8 +152,19 @@
                                         </template>
                                     </v-file-input>
 
-<!--                                    <v-switch v-model="valid" class="ma-4" label="Valid" readonly></v-switch>-->
-<!--                                    <v-switch v-model="lazy" class="ma-4" label="Lazy"></v-switch>-->
+                                        <v-list v-if="isNotEmptyEventFiles" :dense="true" :rounded="true">
+                                            <v-subheader>Отчеты</v-subheader>
+                                                <v-list-item-group v-model="item" color="primary">
+                                                    <v-list-item v-for="(item, i) in eventFiles" :key="i">
+                                                        <v-list-item-action>
+                                                            <v-icon>mdi-alarm-light-outline</v-icon>
+                                                        </v-list-item-action>
+                                                        <v-list-item-content>
+                                                            <v-list-item-title v-html="item.original_name.substr(0,50)"></v-list-item-title>
+                                                        </v-list-item-content>
+                                                    </v-list-item>
+                                                </v-list-item-group>
+                                        </v-list>
                                 </v-col>
                             </v-row>
                         </template>
@@ -178,58 +189,6 @@
                         @change="updateRange"
                         locale="ru"
                 ></v-calendar>
-<!--                <v-menu-->
-<!--                        v-model="selectedOpen"-->
-<!--                        :close-on-content-click="false"-->
-<!--                        :activator="selectedElement"-->
-<!--                        full-width-->
-<!--                        offset-x-->
-<!--                >-->
-<!--                    <v-card color="grey lighten-4" :width="350" flat>-->
-<!--                        <v-toolbar :color="selectedEvent.color" dark class="align-items">-->
-<!--                            <v-toolbar-title v-html="selectedEvent.name"></v-toolbar-title>-->
-<!--                            <v-spacer></v-spacer>-->
-<!--                            <v-btn @click="deleteEvent(selectedEvent.id)" icon>-->
-<!--                                <v-icon>mdi-pencil</v-icon>-->
-<!--                            </v-btn>-->
-<!--                            <v-btn @click="deleteEvent(selectedEvent.id)" icon>-->
-<!--                                <v-icon>mdi-delete</v-icon>-->
-<!--                            </v-btn>-->
-<!--&lt;!&ndash;                            <div class="flex-grow-1"></div>&ndash;&gt;-->
-<!--                        </v-toolbar>-->
-
-<!--                        <v-card-text>-->
-<!--                            <form v-if="currentlyEditing !== selectedEvent.id">-->
-<!--                                {{ selectedEvent.details }}-->
-<!--                            </form>-->
-<!--                            <form v-else>-->
-
-<!--                                <v-textarea-->
-<!--                                        v-model="selectedEvent.details"-->
-<!--                                        type="text"-->
-<!--                                        style="width: 100%"-->
-<!--                                        :min-height="100"-->
-<!--                                        placeholder="add note">-->
-<!--                                </v-textarea>-->
-<!--                            </form>-->
-<!--                        </v-card-text>-->
-
-<!--                        <v-card-actions>-->
-<!--                            <v-btn text color="secondary" @click="selectedOpen = false">-->
-<!--                                close-->
-<!--                            </v-btn>-->
-<!--                            <v-btn v-if="currentlyEditing !== selectedEvent.id" text @click.prevent="editEvent(selectedEvent)">-->
-<!--                                edit-->
-<!--                            </v-btn>-->
-<!--                            <v-btn text v-else type="submit" @click.prevent="updateEvent(selectedEvent)">-->
-<!--                                Save-->
-<!--                            </v-btn>-->
-<!--                        </v-card-actions>-->
-<!--                    </v-card>-->
-
-
-
-<!--                </v-menu>-->
             </v-sheet>
         </v-col>
     </v-row>
@@ -311,6 +270,7 @@
 
             eventDataReset(){
                 this.event = {};
+                this.files=[];
             },
 
             saveEvent () {
@@ -318,10 +278,14 @@
                     user_api.editEventApi(this.event)
                         .then((rs)=>{
                             Vue.set(this.events, this.events.findIndex(item=>item.id === rs.data.id), rs.data );
-                            this.setFocus(rs.data.end);
-                            this.eventDataReset();
                             if(this.files.length!==0){
-                                this.upload();
+                                this.upload(rs.data.id)
+                                    .then(()=>{
+                                        this.afterAddEditDeal(rs.data);
+                                    });
+                            }
+                            else{
+                                this.afterAddEditDeal(rs.data);
                             }
                         });
                 }
@@ -329,15 +293,31 @@
                     user_api.addEventApi(this.event)
                         .then((rs)=>{
                             this.events.push(rs.data);
-                            this.setFocus(rs.data.end);
-                            this.eventDataReset();
-                        }).then(()=>{
                             if(this.files.length!==0){
-                                this.upload();
+                                alert("dasdasdas")
+                                this.upload(rs.data.id)
+                                    .then(()=>{
+                                        this.afterAddEditDeal(rs.data);
+                                });
+                            }
+                            else{
+                                this.afterAddEditDeal(rs.data);
                             }
                         });
                 }
             },
+
+
+            afterAddEditDeal(ev){
+                this.setFocus(ev.end);
+                this.closeEventDialog();
+            },
+
+
+            // isEventEdit(){
+            //     console.log(this.event.id)
+            //     return this.event.id;
+            // },
 
 
 
@@ -373,8 +353,12 @@
             },
 
             showEvent ({ event }) {
-                this.event = Object.assign({}, event)
-                this.dialog=true;
+                file_api.getFiles(event.id).then(rs=>{
+                    this.eventFiles=rs.data;
+                    this.event = Object.assign({}, event)
+                    this.dialog=true;
+                })
+
             },
 
             updateRange ({ start, end }) {
@@ -391,37 +375,38 @@
                 return Math.floor((b - a + 1) * Math.random()) + a
             },
 
-            upload(){
+            upload(eventId){
                 let outer = this;
                 return new Promise((resolve, reject) => {
                     let formData = new FormData();
-                        if( outer.files.length > 1){
-                            outer.files.forEach((item)=>{
-                                formData.append('file', item);
-                            });
-                            file_api.uploadFiles(formData).then(rs=>{
-
-                            });
-                        }
-
-                        else{
-                            formData.append("file",outer.files[0]);
-                            file_api.uploadFile(formData).then(rs=>{
-                                console.log(rs.data)
-                                file_api.downloadFile(rs.data.fileName).then(rs2=>{
-                                    console.log(rs2)
-                                    const url = window.URL.createObjectURL(new Blob([rs2.data]));
-                                    const link = document.createElement('a');
-                                    link.href = url;
-                                    link.setAttribute('download', 'file.pdf'); //or any other extension
-                                    document.body.appendChild(link);
-                                    link.click();
-
-                                })
-                            });
-                        }
+                    formData.append('eventId', eventId)
+                    if (outer.files.length > 1) {
+                        outer.files.forEach((item) => {
+                            formData.append('file', item);
+                        });
+                        file_api.uploadFiles(formData).then(() => {
+                            resolve();
+                        });
+                    } else {
+                        formData.append("file", outer.files[0]);
+                        file_api.uploadFile(formData).then(() => {
+                            resolve();
+                        })
+                    }
                 })
             },
+            filesChange(){
+                if(this.files.length >4){
+                    this.files=[];
+                    alert("Нельзя добавлять больше 4 файлов")
+                }
+            },
+
+            isNotEmptyEventFiles(){
+                return this.eventFiles.length > 0
+            }
         },
     }
 </script>
+<style scoped>
+</style>
