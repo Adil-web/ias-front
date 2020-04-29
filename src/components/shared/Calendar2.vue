@@ -43,7 +43,7 @@
             <v-dialog v-model="dialog" width="1000">
                 <v-card height="400">
                     <v-container>
-                        <template>
+<!--                        <template>-->
                             <v-row align="stretch">
                                 <v-col>
                                     <v-form
@@ -57,7 +57,7 @@
                                                 :rules="rules"
                                                 label="Name"
                                                 required
-                                                :readonly="event.id"
+                                                :readonly="event.id!==undefined"
                                         ></v-text-field>
 
                                         <v-text-field
@@ -103,14 +103,10 @@
                                         ></v-checkbox>
 
 
-                                        <v-btn
-                                                :disabled="!valid"
-                                                color="success"
-                                                class="mr-4"
-                                                type="submit"
-                                                @click.stop="dialog = false"
-
-                                        >
+                                        <v-btn v-if="event.id" :disabled="!valid" color="success" class="mr-4" type="submit" @click.stop="dialog = false">
+                                            изменить
+                                        </v-btn>
+                                        <v-btn v-else :disabled="!valid" color="success" class="mr-4" type="submit" @click.stop="dialog = false">
                                             добавить
                                         </v-btn>
 
@@ -152,28 +148,26 @@
                                         </template>
                                     </v-file-input>
 
-                                        <v-list v-if="isNotEmptyEventFiles" :dense="true" :rounded="true">
+                                        <v-list v-if="!isEmpty" :dense="true" :rounded="true">
                                             <v-subheader>Отчеты</v-subheader>
-                                                <v-list-item-group v-model="item" color="primary">
+                                            <div>РВрыфврфырвфы</div>
+                                                <v-list-item-group color="primary">
                                                     <v-list-item v-for="(item, i) in eventFiles" :key="i">
                                                         <v-list-item-action>
-                                                            <v-icon>mdi-alarm-light-outline</v-icon>
+                                                            <v-icon>mdi-file-document-outline</v-icon>
                                                         </v-list-item-action>
                                                         <v-list-item-content>
-                                                            <v-list-item-title v-html="item.original_name.substr(0,50)"></v-list-item-title>
+                                                            <v-list-item-title v-html="item.original_name.substr(0,50)" @click.stop="downloadFile(item)"></v-list-item-title>
                                                         </v-list-item-content>
                                                     </v-list-item>
                                                 </v-list-item-group>
                                         </v-list>
                                 </v-col>
                             </v-row>
-                        </template>
+<!--                        </template>-->
                     </v-container>
                 </v-card>
             </v-dialog>
-<!--            <v-dialog v-model="dialog" max-width="500">-->
-<!--                -->
-<!--            </v-dialog>-->
 
             <v-sheet height="600">
                 <v-calendar
@@ -196,7 +190,6 @@
 
 <script>
     import Vue from 'vue'
-    import dayjs from 'dayjs'
     import user_api from "../../api/user_api";
     import file_api from "../../api/file_api";
 
@@ -253,6 +246,11 @@
                     timeZone: 'UTC', month: 'long',
                 })
             },
+
+
+            isEmpty(){
+                return this.eventFiles.length === 0
+            }
         },
         created () {
             this.getEvents();
@@ -262,27 +260,27 @@
         },
 
 
+
+
         methods: {
             closeEventDialog(){
-              this.dialog =false;
+              this.dialog = false;
               this.eventDataReset();
             },
 
             eventDataReset(){
                 this.event = {};
-                this.files=[];
+                this.files = [];
+                this.eventFiles = [];
             },
 
             saveEvent () {
                 if(this.event.id){
                     user_api.editEventApi(this.event)
-                        .then((rs)=>{
+                        .then( rs =>{
                             Vue.set(this.events, this.events.findIndex(item=>item.id === rs.data.id), rs.data );
-                            if(this.files.length!==0){
-                                this.upload(rs.data.id)
-                                    .then(()=>{
-                                        this.afterAddEditDeal(rs.data);
-                                    });
+                            if(this.files.length > 0){
+                                this.upload(rs.data.id).then(() => this.afterAddEditDeal(rs.data));
                             }
                             else{
                                 this.afterAddEditDeal(rs.data);
@@ -291,14 +289,10 @@
                 }
                 else{
                     user_api.addEventApi(this.event)
-                        .then((rs)=>{
+                        .then(rs => {
                             this.events.push(rs.data);
-                            if(this.files.length!==0){
-                                alert("dasdasdas")
-                                this.upload(rs.data.id)
-                                    .then(()=>{
-                                        this.afterAddEditDeal(rs.data);
-                                });
+                            if(this.files.length > 0){
+                                this.upload(rs.data.id).then(() => this.afterAddEditDeal(rs.data));
                             }
                             else{
                                 this.afterAddEditDeal(rs.data);
@@ -307,19 +301,10 @@
                 }
             },
 
-
             afterAddEditDeal(ev){
                 this.setFocus(ev.end);
                 this.closeEventDialog();
             },
-
-
-            // isEventEdit(){
-            //     console.log(this.event.id)
-            //     return this.event.id;
-            // },
-
-
 
             reset () {
                 this.$refs.form.reset()
@@ -371,40 +356,27 @@
                     ? 'th'
                     : ['th', 'st', 'nd', 'rd', 'th', 'th', 'th', 'th', 'th', 'th'][d % 10]
             },
-            rnd (a, b) {
-                return Math.floor((b - a + 1) * Math.random()) + a
-            },
 
             upload(eventId){
-                let outer = this;
-                return new Promise((resolve, reject) => {
+                return new Promise((resolve) => {
                     let formData = new FormData();
                     formData.append('eventId', eventId)
-                    if (outer.files.length > 1) {
-                        outer.files.forEach((item) => {
-                            formData.append('file', item);
-                        });
-                        file_api.uploadFiles(formData).then(() => {
-                            resolve();
-                        });
-                    } else {
-                        formData.append("file", outer.files[0]);
-                        file_api.uploadFile(formData).then(() => {
-                            resolve();
-                        })
-                    }
+                    this.files.forEach(item => formData.append('file', item));
+                    file_api.uploadFiles(formData).then(() => resolve());
                 })
             },
+            downloadFile(file){
+              file_api.downloadFile(file);
+
+            },
+
             filesChange(){
-                if(this.files.length >4){
-                    this.files=[];
+                if(this.files.length + this.eventFiles.length > 4){
+                    this.files = [];
                     alert("Нельзя добавлять больше 4 файлов")
                 }
             },
 
-            isNotEmptyEventFiles(){
-                return this.eventFiles.length > 0
-            }
         },
     }
 </script>

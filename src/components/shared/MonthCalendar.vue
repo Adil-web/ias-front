@@ -139,6 +139,7 @@
         },
         watch: {
             year (val) {
+                console.log(val)
                 this.initCalendar()
             }
         },

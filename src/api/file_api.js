@@ -32,14 +32,14 @@ export default {
         return axios.post(UPLOAD_FILES, files, {headers: h})
     },
 
-    downloadFile(fileName) {
+    downloadFile(file) {
         let h = authHeader();
         h["Content-Type"]= "multipart/form-data";
-        axios.get(DOWNLOAD_FILE+'/'+fileName,{responseType: 'blob', headers: h}).then(rs2=>{
-            const url = window.URL.createObjectURL(new Blob([rs2.data]));
+        axios.get(DOWNLOAD_FILE+'/'+file.fs_name,{responseType: 'blob', headers: h}).then(rs=>{
+            const url = window.URL.createObjectURL(new Blob([rs.data]));
             const link = document.createElement('a');
             link.href = url;
-            link.setAttribute('download', 'file.pdf'); //or any other extension
+            link.setAttribute('download', file.original_name);
             document.body.appendChild(link);
             link.click();
         })

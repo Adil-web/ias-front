@@ -38,7 +38,7 @@
         props: {
             activeDates: {
                 type: Array,
-                default: []
+                default: () =>[]
             },
             value: {
                 type: [String, Number],
