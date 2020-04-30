@@ -110,7 +110,7 @@
                                             добавить
                                         </v-btn>
 
-                                        <v-btn
+                                        <v-btn v-if="!event.id"
                                                 color="error"
                                                 class="mr-4"
                                                 @click="reset"
