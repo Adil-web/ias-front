@@ -85,7 +85,6 @@
             },
 
             openCloseProfile(){
-                console.log(this.user)
                 this.profile=!this.profile
             },
         },
