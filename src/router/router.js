@@ -43,6 +43,7 @@ const router =  new VueRouter({
                 },
 
 
+
             ]
         },
         { path: '/login', name:'login', component: Login},
@@ -60,6 +61,7 @@ const router =  new VueRouter({
                 {
                     path: 'calendar2', name: 'calendar2', component: Calendar2
                 },
+
 
             ]
         },
@@ -84,7 +86,6 @@ router.beforeEach((to, from, next) => {
 });
 
 export default router;
-
 
 
 

@@ -42,7 +42,7 @@
                     isPowerBI:false,
                     icon: 'mdi-alarm-light-outline',
                     text: 'Оперативный мониторинг',
-                    path:'gmap',
+                    path:'',
                     src:''
                 },
                 {
@@ -112,6 +112,7 @@
                     isPowerBI: false,
                     icon: 'mdi-apps',
                     text: 'Строящиеся социальные объекты',
+                    path:'gmap',
                     src:''
 
                 },
