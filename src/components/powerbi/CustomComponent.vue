@@ -30,13 +30,15 @@
         <div style="width: 20%;">
             <v-container fluid>
                 <p>{{ filteredObjects.length}}</p>
-                <p>{{ selectedRanges }}</p>
-                <p>{{ selectedCategories }}</p>
+                <p>{{ selectedRange }}</p>
+                <p>{{ selectedCategory }}</p>
 
 
-                <v-checkbox v-for="(item,i) in dateRanges" :key="i"
+                <v-checkbox
+                            :multiple="false"
+                            v-for="(item,i) in dateRanges" :key="i"
                             :value="item"
-                            v-model="selectedRanges"
+                            v-model="selectedRange"
                             :label="item.start+' - '+item.end"
                 ></v-checkbox>
 
@@ -45,7 +47,7 @@
                         v-for="(item,i) in categoryTypes" :key="i"
                         :value="item.id"
                         v-model="selectedCategory"
-                        :label="item.name"
+                        :label="item.name + '--'+ getCategoriesCount(item.id)"
                 ></v-checkbox>
 
             </v-container>
@@ -58,7 +60,7 @@
 
     import social_object_api from "../../api/social_object_api";
     import { latLng } from "leaflet";
-    import { LMap, LTileLayer, LMarker, LPopup, LTooltip } from "vue2-leaflet";
+    import { LMap, LTileLayer, LMarker, LPopup } from "vue2-leaflet";
 
     export default {
         name: "CustomComponent",
@@ -67,7 +69,6 @@
             LTileLayer,
             LMarker,
             LPopup,
-            LTooltip,
             SocialObjectProfile
         },
         data:() => ({
@@ -80,23 +81,46 @@
             },
             socialObjects:[],
             socialObject: null,
+            groupedCategories:null,
 
 
 
             //Фильтрация
-            selectedRanges:[],
+            selectedRange:null,
             dateRanges:[
+                { start:2018, end:2020 },
                 { start:2018, end:2021 },
+                { start:2019, end:2019 },
                 { start:2019, end:2020 },
-                { start:2019, end:2019 }
+                { start:2019, end:2021 }
             ],
 
             selectedCategory: null,
-            categoryTypes:[ { name: 'Культура' , id:1 }, { name: 'Здравоохранение', id: 2 }, { name: 'Спорт', id:3 } ]
+            categoryTypes:[ { name: 'Здравоохранение' , id:1 }, { name: 'Культура', id: 2 }, { name: 'Спорт', id:3 } , { name: 'Дороги', id:4 }]
 
         }),
 
         methods: {
+
+            groupByWrapper( arr, key){
+                this.groupedCategories = this.groupBy(arr, key);
+            },
+
+            getCategoriesCount(id){
+                if(this.groupedCategories[id]){
+                    return this.groupedCategories[id].length
+                }
+                else{
+                    return 0;
+                }
+            },
+
+            groupBy( arr, key ){
+                 return  arr.reduce(function (rv,x) {
+                    (rv[x[key]]=rv[x[key]] || [] ).push(x);
+                    return rv;
+                 },{});
+            },
 
             openCloseProfile(socialObj) {
                 if(socialObj===undefined){
@@ -111,22 +135,22 @@
                 return latLng(latitude, longitude)
             },
 
-            getMinMaxYear(arr){
-                let min = 999999;
-                let max = 0;
-                arr.forEach(item => {
-                    if( item.start < min ){
-                        min = item.start;
-                    }
-                    if(item.end > max){
-                        max = item.end;
-                    }
-                });
-                return {
-                    min: min,
-                    max: max
-                }
-            }
+            // getMinMaxYear(arr){
+            //     let min = 999999;
+            //     let max = 0;
+            //     arr.forEach(item => {
+            //         if( item.start < min ){
+            //             min = item.start;
+            //         }
+            //         if(item.end > max){
+            //             max = item.end;
+            //         }
+            //     });
+            //     return {
+            //         min: min,
+            //         max: max
+            //     }
+            // }
         },
         created() {
             social_object_api.getSocialObjects().then(rs=>{
@@ -141,14 +165,16 @@
 
             filteredObjects(){
                 let resultArray = this.socialObjects;
-                if(this.selectedRanges.length > 0){
-                    let { min, max} = this.getMinMaxYear(this.selectedRanges);
-                    resultArray = resultArray.filter(item => item.start >= min && item.end <= max);
+                if(this.selectedRange){
+                    let { start, end} = this.selectedRange;
+                    resultArray = resultArray.filter(item => item.start === start && item.end === end);
                 }
                 if(this.selectedCategory){
                     resultArray = resultArray
                         .filter(item => item.category_type === this.selectedCategory  && item.category_type === this.selectedCategory);
                 }
+
+                this.groupByWrapper( resultArray, 'category_type');
                 return resultArray;
 
             }
