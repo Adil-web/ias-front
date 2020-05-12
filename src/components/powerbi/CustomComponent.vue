@@ -58,7 +58,7 @@
 
     import social_object_api from "../../api/social_object_api";
     import { latLng } from "leaflet";
-    import { LMap, LTileLayer, LMarker, LPopup, LTooltip } from "vue2-leaflet";
+    import { LMap, LTileLayer, LMarker, LPopup } from "vue2-leaflet";
 
     export default {
         name: "CustomComponent",
@@ -67,7 +67,6 @@
             LTileLayer,
             LMarker,
             LPopup,
-            LTooltip,
             SocialObjectProfile
         },
         data:() => ({

@@ -12,7 +12,7 @@
             </v-toolbar-title>
             <v-spacer />
 
-            <v-btn icon @click="$router.push('/admin/calendar2')">
+            <v-btn icon @click="$router.push('/admin/calendar')">
                 <v-icon>mdi-calendar-month-outline</v-icon>
             </v-btn>
 <!--                <v-btn icon @click="$router.push('/admin/calendar')">-->

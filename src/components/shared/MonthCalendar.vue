@@ -1,18 +1,23 @@
 <template>
-    <div class="c-wrapper">
-        <div class="calendar"
-             @mouseup="mouseUp"
-             @mouseleave.stop="mouseUp"
-        >
-            <div class="calendar__title">{{ monthTitle }}</div>
-            <div class="calendar__body">
-                <div v-for="(day, key) in 7" :key="`title${day}`" class="calendar__day day__weektitle"  :style="{fontSize: weekTitleFontSizeAdjustLang}">{{ showDayTitle(key) }}</div>
-                <div v-for="(dayObj, key) in showDays" class="calendar__day" :key="`day${key}`">
-                    <div
-                            @mouseover="dragDay(dayObj)"
-                            @mousedown="mouseDown(dayObj)"
-                            class="day"
-                            :class="classList(dayObj)">{{ dayObj.value }}</div>
+    <div class="jan1">
+        <div class="anotherJan2 jan2">
+            <div class="monthHeader">
+                <span class="monthHeaderText">{{monthTitle}}</span>
+            </div>
+            <div class="monthContent" role="grid">
+                <div class="monthContentDaysOfWeek" role="row">
+                    <span v-for="(day, index) in 7" :key="`title${day}`" class="oneDayInWeek" role="columnheader">
+                        <span>{{showDayTitle(index)}}</span>
+                    </span>
+                </div>
+                <div class="monthDays" role="rowgroup">
+                    <div v-for="(value, name) in daysByWeeks" :key="name" class="daysRowInMonth" role="row" >
+                        <span v-for="day in value" :key="day" class="oneDayInMonth" role="gridcell">
+                            <div @click.stop="toggleDay(day)" class="oneDayInMonthContent" v-bind:class="{ 'otherDay': day.isOtherMonth}">
+                                {{day.day}}
+                            </div>
+                        </span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -22,223 +27,243 @@
 <script>
     import dayjs from 'dayjs'
     export default {
-        name: 'month-calendar',
-        props: {
-            activeDates: {
-                type: Array,
-                default: () => []
-            },
+        name: "MonthCalendar",
+        props:{
             month: {
-                type: [String, Number],
-                default: () => dayjs().month() + 1
+                type: [String, Number]
             },
             year: {
-                type: [String, Number],
-                default: () => dayjs().year()
-            },
-            lang: {
-                type: String,
-                default: 'en'
-            },
-            prefixClass: {
-                type: String,
-                default: () => 'calendar--active'
+                type: [String, Number]
             }
+
         },
-        data () {
-            return {
-                showDays: [],
-                isMouseDown: false
+        data:() => ({
+            weekRows: 6,
+            daysInWeek: 7,
+            showDays:[],
+            daysByWeeks:{
+                1:{ start: 0,  end: 7 },
+                2:{ start: 7,  end: 14 },
+                3:{ start: 14, end: 21 },
+                4:{ start: 21, end: 28 },
+                5:{ start: 28, end: 35 },
+                6:{ start: 35, end: 42 },
+            },
+            dayMapping : {
+                kk: ['Дс', 'Сс', 'Ср', 'Бс', 'Жм', 'Сб', 'Жк'],
+                ru: ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс']
             }
-        },
-        computed: {
-            weekTitleFontSizeAdjustLang () {
-                const fontSizeMapping = {
-                    en: '14px',
-                    kk: '14px',
-                    ru: '12px'
-                }
-                return fontSizeMapping[this.lang]
+
+        }),
+
+
+
+        methods:{
+
+            toggleDay(day){
+                this.$emit('day', { day: day, month: this.month , year: this.year })
+            },
+            showDayTitle (day) {
+                return this.dayMapping.ru[day]
             },
 
-            monthTitle () {
-                const monthMapping = {
-
-                    en: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
-                    kk: ['Қаңтар', 'Ақпан', 'Наурыз', 'Сәуір', 'Мамыр', 'Маусым', 'Шілде', 'Тамыз', 'Қыркүйек', 'Қазан', 'Қараша', 'Желтоқсан'],
-                    ru: ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь']
+            resetDaysByWeeks() {
+                return {
+                    1:{ start: 0,  end: 7 },
+                    2:{ start: 7,  end: 14 },
+                    3:{ start: 14, end: 21 },
+                    4:{ start: 21, end: 28 },
+                    5:{ start: 28, end: 35 },
+                    6:{ start: 35, end: 42 },
                 }
-                return monthMapping[this.lang][this.month - 1]
             },
 
-
-        },
-        methods: {
             initCalendar () {
-                if (!this.year || !this.month) return []
                 const activeMonth = dayjs()
                     .set('date', 1)
                     .set('year', this.year)
-                    .set('month', this.month - 1)
-                let firstDay = activeMonth.startOf('month').day() - 1
-                if (firstDay < 0) firstDay += 7
-                const lastDate = activeMonth.endOf('month').date()
-                const weekRow = firstDay >= 5 ? 6 : 5
-                const WEEK = 7
-                let day = 0
-                const fullCol = Array.from(Array(weekRow * WEEK).keys())
-                    .map(i => {
-                        let value = firstDay <= i
-                            ? day++ % lastDate + 1
-                            : ''
-                        return {
-                            value,
-                            active: false,
-                            isOtherMonth: firstDay > i || day > lastDate
-                        }
-                    })
-                this.showDays = fullCol
+                    .set('month', this.month - 1);
+                const prevMonth = activeMonth.set('month', activeMonth.get('month') -1 );
+                let firstDay = activeMonth.startOf('month').day() - 1;
+                if ( firstDay < 0 ) firstDay += 7;
+                const lastDate = activeMonth.endOf('month').date();
+                let prevMonthLastDate = prevMonth.endOf('month').date() - firstDay;
+
+
+
+                let arr = Array.from(Array( this.weekRows * this.daysInWeek ).keys());
+                let day = 0;
+                arr = arr.map(item=>{
+                    let mapItem = '';
+                    if(firstDay <= item){
+                        mapItem = day++ % lastDate + 1;
+                    }
+                    else {
+                        mapItem = ++prevMonthLastDate
+                    }
+                    return { day: mapItem , isOtherMonth: firstDay > item || day > lastDate }
+                });
+
+                Object.keys(this.daysByWeeks).forEach( item=>{
+                    this.daysByWeeks[item] = arr.slice( this.daysByWeeks[item].start, this.daysByWeeks[item].end );
+                });
+
 
             },
-            showDayTitle (day) {
-                const dayMapping = {
-                    en: ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'],
-                    kk: ['Дс', 'Сс', 'Ср', 'Бс', 'Жм', 'Сб', 'Жк'],
-                    ru: ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс']
-                }
-                return dayMapping[this.lang][day]
-            },
-            toggleDay (dayObj) {
-                if (dayObj.isOtherMonth) return
-                this.$emit('toggleDate', {
-                    month: this.month,
-                    date: dayObj.value,
-                    selected: !dayObj.active
-                })
-            },
-            dragDay (dayObj) {
-                if (this.isMouseDown) this.toggleDay(dayObj)
-            },
-            mouseDown (dayObj) {
-                this.toggleDay(dayObj)
-                this.isMouseDown = true
-            },
-            mouseUp () {
-                this.isMouseDown = false
-            },
-            classList (dayObj) {
-                let oClassList = {
-                    'calendar__day--otherMonth': dayObj.isOtherMonth,
-                    [this.prefixClass]: dayObj.active
-                }
-
-                if (dayObj.active) oClassList[dayObj.className] = true
-
-                return oClassList
-            }
         },
+
+        computed:{
+            monthTitle () {
+                const monthMapping = {
+                    kk: ['Қаңтар', 'Ақпан', 'Наурыз', 'Сәуір', 'Мамыр', 'Маусым', 'Шілде', 'Тамыз', 'Қыркүйек', 'Қазан', 'Қараша', 'Желтоқсан'],
+                    ru: ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь']
+                };
+                return monthMapping.ru[this.month - 1]
+            },
+        },
+
         watch: {
             year (val) {
                 console.log(val)
+                this.daysByWeeks = this.resetDaysByWeeks();
                 this.initCalendar()
             }
         },
 
-        created () {
-            this.initCalendar()
+        created() {
+            this.initCalendar();
         }
 
     }
 </script>
 
 <style scoped>
-    .c-wrapper {
-        padding: 10px;
-    }
-    .calendar {
-        background-color: #fff;
-        min-height: 295px;
-        text-align: center;
-        color: rgba(53,60,70,0.8);
-        border-radius: 2px;
-        min-width: 0;
-        position: relative;
-        text-decoration: none;
-        box-shadow: 0 2px 1px -1px rgba(0,0,0,0.2), 0 1px 1px 0 rgba(0,0,0,0.14), 0 1px 3px 0 rgba(0,0,0,0.12);
-        transition: transform 0.3s ease;
-    }
-    .calendar:hover {
-        z-index: 2;
-    }
-    @media (min-width: 1024px) {
-        .calendar:hover {
-            transform: scale(1.15);
-            box-shadow: 0 7px 21px 0 rgba(0,0,0,0.1);
+    @media (max-width:1500px) {
+        .jan1 {
+            min-width: 224px
+        }
+
+        .jan2 {
+            width: 208px
         }
     }
-    .calendar .calendar__title {
-        font-weight: bold;
-        flex: 100%;
+
+    .jan1{
+        flex-basis: 25%;
+        min-width: 250px;
+        min-height: 252px;
+    }
+    .jan2{
+        width: 256px;
+    }
+    .anotherJan2 {
+        padding:0 14px 16px 19px;
+        -moz-user-select:none;
+        position:relative
+    }
+    .monthHeader {
+        height: 32px;
+        font-size: 12px;
+        font-weight: 400;
+        color: #3c4043;
         display: flex;
         align-items: center;
-        justify-content: center;
-        border-bottom: 1px solid rgba(196,196,196,0.3);
-        font-size: 18px;
-        height: 50px;
-        margin-bottom: 12px;
+        margin-left: 4px;
+        margin-right: 3px;
     }
-    .calendar .calendar__body {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: flex-start;
-        align-content: flex-start;
-        padding: 0px 20px;
-        min-width: 194px;
-    }
-    .calendar .calendar__day {
-        flex: 14.28%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        font-size: 16px;
-        height: 31px;
-        color: #5db3d4;
-    }
-    .calendar .day__weektitle {
-        color: rgba(53,60,70,0.8);
-    }
-    .calendar .day {
+    .monthHeaderText {
+        flex-grow: 1;
+        padding-left: 5px;
+        font-family: 'Google Sans',Roboto,Arial,sans-serif;
         font-size: 14px;
+        font-weight: 500;
+        letter-spacing: .25px;
+        line-height: 20px;
+        color: #70757a;
+    }
+
+    .monthContent {
+        display: table;
+        table-layout: fixed;
+        width: 100%;
+        text-align: center;
+    }
+
+    .monthContentDaysOfWeek {
+        display: table-row;
+        height: 24px;
+    }
+
+    .oneDayInWeek{
+        font-size: 12px;
+        font-weight: 400;
+        outline: none;
+        display: table-cell;
+        vertical-align: middle;
+        color: #70757a;
+    }
+    .monthDays{
+        display: table-row-group;
+    }
+
+    .oneDayInMonth {
+        display: table-cell;
+        font-size: 10px;
+        font-weight: 500;
+        vertical-align: middle;
+        /*color: #70757a;*/
+        color:#3c4043;
         cursor: pointer;
-        user-select: none;
-        width: 22px;
-        height: 22px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
+        outline: none;
         position: relative;
-        border-radius: 5px;
+
     }
-    .calendar .day:after {
-        content: '';
-        display: block;
-        height: 10px;
-        width: 10px;
+
+    .oneDayInMonth::before {
         position: absolute;
-        top: -5px;
-        right: -5px;
+        height: 24px;
+        left: -50%;
+        right: 50%;
+        z-index: -1;
+        content: "";
+        background-color: white;
+        transition: background-color 100ms linear;
+    }
+
+    .oneDayInMonthContent {
+        width: 24px;
+        height: 24px;
+        line-height: 24px;
+        margin: auto;
+        -moz-border-radius: 50%;
         border-radius: 50%;
-        z-index: 1;
-        background-color: transparent;
-    }
-    .calendar .day:not(.calendar__day--otherMonth):hover {
-        background-color: rgba(102,102,102,0.1);
-        border-radius: 5px;
-    }
-    .calendar .calendar__day--otherMonth {
-        color: #eaeaea;
-        cursor: auto;
+        position: relative;
+        background-color: white;
+        transition: background-color 100ms linear;
+        font-size: 12px;
+        font-weight: 400;
     }
 
+
+    .oneDayInMonthContent:hover {
+        background-color:#aecbfa
+    }
+
+
+    .daysRowInMonth {
+        display: table-row;
+        height: 24px;
+    }
+
+    [role="columnheader"],
+    [role="rowheader"],
+    [role="gridcell"] {
+        outline:none
+    }
+
+
+
+    .otherDay{
+        color: #70757a;
+    }
 </style>
-
