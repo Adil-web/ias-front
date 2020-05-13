@@ -30,25 +30,82 @@
         <div style="width: 20%;">
             <v-container fluid>
                 <p>{{ filteredObjects.length}}</p>
-                <p>{{ selectedRange }}</p>
-                <p>{{ selectedCategory }}</p>
+<!--                <p>{{ selectedRange }}</p>-->
+<!--                <p>{{ selectedCategory }}</p>-->
 
 
+                <div v-for="(item,i) in dateRanges" :key="i">
+                    <v-badge style="bottom: calc(100% - 0px);"
+                             color="green"
+                             :content="getRangesCount(item.start+'-'+item.end)"
+                    >
                 <v-checkbox
+
                             :multiple="false"
-                            v-for="(item,i) in dateRanges" :key="i"
                             :value="item"
                             v-model="selectedRange"
                             :label="item.start+' - '+item.end"
+                            class="ma-0 pa-0"
+                            dense
                 ></v-checkbox>
+                    </v-badge>
+                </div>
 
+                <div class = "mb-5"></div>
+
+                <div v-for="(item,i) in categoryTypes" :key="i">
+                <v-badge style="bottom: calc(100% - 0px);"
+                        color="green"
+                        :content="getCategoriesCount(item.id)"
+                >
+                    <v-checkbox
+                            :multiple="false"
+                            :value="item.id"
+                            v-model="selectedCategory"
+                            :label="item.name"
+                            class="ma-0 pa-0"
+                            dense
+                    ></v-checkbox>
+                </v-badge>
+                </div>
+
+
+                <div class = "mb-5">gfdgdgdfgd</div>
+
+                <div v-for="(item,i) in sourceTypes" :key="i">
+                    <v-badge style="bottom: calc(100% - 0px);"
+                             color="green"
+                             :content="getSourcesCount(item.id)"
+                    >
                 <v-checkbox
                         :multiple="false"
-                        v-for="(item,i) in categoryTypes" :key="i"
                         :value="item.id"
-                        v-model="selectedCategory"
-                        :label="item.name + '--'+ getCategoriesCount(item.id)"
+                        v-model="selectedSource"
+                        :label="item.name"
+                        class="ma-0 pa-0"
+                        dense
                 ></v-checkbox>
+                </v-badge>
+                </div>
+
+
+                <div class = "mb-5"></div>
+
+                <div v-for="(item,i) in regionTypes" :key="i">
+                <v-badge style="bottom: calc(100% - 0px);"
+                             color="green"
+                             :content="getRegionCount(item.id)"
+                    >
+                <v-checkbox
+                        :multiple="false"
+                        :value="item.id"
+                        v-model="selectedRegion"
+                        :label="item.name"
+                        class="ma-0 pa-0"
+                        dense
+                ></v-checkbox>
+                </v-badge>
+                </div>
 
             </v-container>
         </div>
@@ -57,7 +114,6 @@
 
 <script>
     import SocialObjectProfile from "@/components/shared/SocialObjectProfile";
-
     import social_object_api from "../../api/social_object_api";
     import { latLng } from "leaflet";
     import { LMap, LTileLayer, LMarker, LPopup } from "vue2-leaflet";
@@ -82,11 +138,16 @@
             socialObjects:[],
             socialObject: null,
             groupedCategories:null,
+            groupedRanges:null,
+            groupedSources:null,
+            groupedRegions:null,
 
 
 
             //Фильтрация
             selectedRange:null,
+            selectedSource:null,
+            selectedRegion:null,
             dateRanges:[
                 { start:2018, end:2020 },
                 { start:2018, end:2021 },
@@ -96,30 +157,78 @@
             ],
 
             selectedCategory: null,
-            categoryTypes:[ { name: 'Здравоохранение' , id:1 }, { name: 'Культура', id: 2 }, { name: 'Спорт', id:3 } , { name: 'Дороги', id:4 }]
+            categoryTypes:[
+                { name: 'Здравоохранение' , id:1 },
+                { name: 'Культура', id: 2 },
+                { name: 'Спорт', id:3 },
+                { name: 'Дороги', id:4 }
+            ],
+            sourceTypes:[
+                { name: 'Республиканский', id:1 },
+                { name: 'Местный', id: 2 },
+                { name: 'Другое', id: 3 }
+            ],
+            regionTypes:[
+                { name: 'Кызылкогинский' , id:1 },
+                { name: 'Жылыойский', id: 2 },
+                { name: 'г.Атырау', id:3 },
+                { name: 'Индерский', id:4 },
+                { name: 'Махамбетский', id: 5 },
+                { name: 'Курмангазинский', id:6 },
+                { name: 'Исатайский', id:7 },
+                { name: 'Макатскй', id: 8 }
+            ],
 
         }),
 
         methods: {
 
-            groupByWrapper( arr, key){
-                this.groupedCategories = this.groupBy(arr, key);
-            },
 
             getCategoriesCount(id){
                 if(this.groupedCategories[id]){
                     return this.groupedCategories[id].length
                 }
                 else{
-                    return 0;
+                    return '0';
                 }
             },
 
-            groupBy( arr, key ){
-                 return  arr.reduce(function (rv,x) {
+
+            getSourcesCount(sourceId){
+                if(this.groupedSources[sourceId]){
+                    return this.groupedSources[sourceId].length
+                }
+                else{
+                    return '0';
+                }
+            },
+            getRegionCount(regionId){
+                if(this.groupedRegions[regionId]){
+                    return this.groupedRegions[regionId].length
+                }
+                else{
+                    return '0';
+                }
+
+
+            },
+
+
+            getRangesCount(startEnd){
+                if(this.groupedRanges[startEnd]){
+                    return this.groupedRanges[startEnd].length
+                }
+                else{
+                    return '0';
+                }
+            },
+
+            groupBy( arr, key, groupedData){
+                this[groupedData] = arr.reduce(function (rv,x) {
                     (rv[x[key]]=rv[x[key]] || [] ).push(x);
                     return rv;
-                 },{});
+                },{});
+                console.log( this[groupedData])
             },
 
             openCloseProfile(socialObj) {
@@ -135,26 +244,13 @@
                 return latLng(latitude, longitude)
             },
 
-            // getMinMaxYear(arr){
-            //     let min = 999999;
-            //     let max = 0;
-            //     arr.forEach(item => {
-            //         if( item.start < min ){
-            //             min = item.start;
-            //         }
-            //         if(item.end > max){
-            //             max = item.end;
-            //         }
-            //     });
-            //     return {
-            //         min: min,
-            //         max: max
-            //     }
-            // }
         },
         created() {
             social_object_api.getSocialObjects().then(rs=>{
-                this.socialObjects= rs.data
+                rs.data.forEach(item => {
+                    item.startEnd = item.start+ '-' + item.end;
+                });
+                this.socialObjects= rs.data;
             });
         },
 
@@ -166,15 +262,27 @@
             filteredObjects(){
                 let resultArray = this.socialObjects;
                 if(this.selectedRange){
-                    let { start, end} = this.selectedRange;
+                    let { start, end } = this.selectedRange;
                     resultArray = resultArray.filter(item => item.start === start && item.end === end);
                 }
                 if(this.selectedCategory){
                     resultArray = resultArray
-                        .filter(item => item.category_type === this.selectedCategory  && item.category_type === this.selectedCategory);
+                        .filter(item => item.category_type === this.selectedCategory);
                 }
 
-                this.groupByWrapper( resultArray, 'category_type');
+                if(this.selectedSource){
+                    resultArray = resultArray
+                        .filter(item => item.source_type === this.selectedSource);
+                }
+                if(this.selectedRegion){
+                    resultArray = resultArray
+                        .filter(item => item.region_type === this.selectedRegion);
+                }
+
+                this.groupBy( resultArray, 'category_type', 'groupedCategories');
+                this.groupBy( resultArray, 'startEnd', 'groupedRanges');
+                this.groupBy( resultArray, 'source_type', 'groupedSources');
+                this.groupBy( resultArray, 'region_type', 'groupedRegions');
                 return resultArray;
 
             }

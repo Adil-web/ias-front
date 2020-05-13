@@ -61,7 +61,7 @@
                 },
                 {
                     isPowerBI:true,
-                    icon: 'mdi-currency-eur',
+                    icon: 'mdi-currency-kzt',
                     text: 'Бюджет',
                     path:'bi',
                     src: 'https://app.powerbi.com/view?r=eyJrIjoiMDI4MjAzMWMtNTJlYy00NzI3LTlkZmUtZjc2NDIwNTdkNWI0IiwidCI6IjU1MDhkZmUzLWYwYWYtNGEyOS1hMjljLTY5N2JhYjIzNDRjNiIsImMiOjl9'
