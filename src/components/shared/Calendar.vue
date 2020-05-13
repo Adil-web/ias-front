@@ -282,8 +282,9 @@
 
         methods: {
             nr(event){
+                console.log(event.day)
                 this.type = 'month';
-                this.setFocus( event.year + '-' + event.month + '-' + event.day);
+                this.setFocus( event.year + '-' + event.month + '-' + event.day.day);
             },
 
 
