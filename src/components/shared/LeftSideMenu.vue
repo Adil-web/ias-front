@@ -6,22 +6,52 @@
                 app
         >
             <v-list dense>
-                <template v-for="item in items">
-                    <v-list-item
-                            :key="item.text"
-                             @click="routing(item)"
-                            link
-                    >
-                        <v-list-item-action>
-                            <v-icon>{{ item.icon }}</v-icon>
-                        </v-list-item-action>
-                        <v-list-item-content>
-                            <v-list-item-action-text>
-                                {{ item.text }}
-                            </v-list-item-action-text>
-                        </v-list-item-content>
-                    </v-list-item>
-                </template>
+                <v-list-item-group color="primary">
+                    <div v-for="item in items" v-bind:key="item.text">
+                        <template  v-if="!item.children">
+
+                                <v-list-item
+                                         @click="routing(item)"
+                                        link
+                                >
+                                    <v-list-item-action>
+                                        <v-icon>{{ item.icon }}</v-icon>
+                                    </v-list-item-action>
+                                    <v-list-item-content>
+                                        <v-list-item-action-text>
+                                            {{ item.text }}
+                                        </v-list-item-action-text>
+                                    </v-list-item-content>
+                                </v-list-item>
+
+                        </template>
+                        <v-list-group v-else  prepend-icon="mdi-school" value="true">
+                            <template v-slot:activator>
+                                <v-list-item-content>
+                                    <v-list-item-action-text>
+                                        {{ item.text }}
+                                    </v-list-item-action-text>
+                                </v-list-item-content>
+                            </template>
+                                <v-list-item
+                                        @click="routing(child)"
+                                        v-for="(child, i) in item.children"
+                                        :key="i"
+                                        link
+                                >
+
+                                    <v-list-item-action>
+                                        <v-icon>{{ child.icon }}</v-icon>
+                                    </v-list-item-action>
+                                    <v-list-item-content>
+                                        <v-list-item-action-text>
+                                            {{ child.text }}
+                                        </v-list-item-action-text>
+                                    </v-list-item-content>
+                                </v-list-item>
+                        </v-list-group>
+                    </div>
+                </v-list-item-group>
             </v-list>
         </v-navigation-drawer>
 
@@ -126,9 +156,25 @@
                 {
                     icon: 'mdi-school',
                     text: 'Образование',
-                    path:'bi',
-                    isPowerBI:true,
-                    src:'https://app.powerbi.com/view?r=eyJrIjoiY2I5NWZiZDYtYTNlMS00ZWFmLTkwYjktODdjYmE1ZDY5YzEzIiwidCI6IjU1MDhkZmUzLWYwYWYtNGEyOS1hMjljLTY5N2JhYjIzNDRjNiIsImMiOjl9'
+                    path:'',
+                    isPowerBI:false,
+                    src:'',
+                    children:[
+                        {
+                            icon: 'mdi-cast-education',
+                            text: 'Образование',
+                            path:'bi',
+                            isPowerBI:true,
+                            src:'https://app.powerbi.com/view?r=eyJrIjoiY2I5NWZiZDYtYTNlMS00ZWFmLTkwYjktODdjYmE1ZDY5YzEzIiwidCI6IjU1MDhkZmUzLWYwYWYtNGEyOS1hMjljLTY5N2JhYjIzNDRjNiIsImMiOjl9'
+                        },
+                        {
+                            icon: 'mdi-chart-bar',
+                            text: 'Оценка состояния образования',
+                            path:'bi',
+                            isPowerBI:true,
+                            src:'https://app.powerbi.com/view?r=eyJrIjoiMTMxOWI5NzktZTNhMi00MWQwLWEzMjAtNjNmODRjZjZkZGEyIiwidCI6IjU1MDhkZmUzLWYwYWYtNGEyOS1hMjljLTY5N2JhYjIzNDRjNiIsImMiOjl9'
+                        },
+                    ]
                 },
                 {
                     isPowerBI:true,
@@ -158,6 +204,9 @@
             ],
         }),
         methods:{
+            nr(){
+              console.log("daa")
+            },
           routing(item){
                   this.$router.push({ name: item.path, params: { id: item.src } });
           },
