@@ -104,10 +104,15 @@
                                             label="Выполнено?"
                                     ></v-checkbox>
 
+                                    <span v-if="event.id">
+                                        <v-btn :disabled="!valid" color="success" class="mr-4" type="submit" @click.stop="dialog = false">
+                                            изменить
+                                        </v-btn>
+                                        <v-btn color="error" class="mr-4"  @click.stop="deleteEvent">
+                                            удалить
+                                        </v-btn>
+                                    </span>
 
-                                    <v-btn v-if="event.id" :disabled="!valid" color="success" class="mr-4" type="submit" @click.stop="dialog = false">
-                                        изменить
-                                    </v-btn>
                                     <v-btn v-else :disabled="!valid" color="success" class="mr-4" type="submit" @click.stop="dialog = false">
                                         добавить
                                     </v-btn>
@@ -184,7 +189,7 @@
                             ref="calendar"
                             v-model="focus"
                             color="primary"
-                            :events="events"
+                            :events="fvents"
                             :event-color="getEventColor"
                             :type="type"
                             @click:event="showEvent"
@@ -268,6 +273,9 @@
 
             isEmpty(){
                 return this.eventFiles.length === 0
+            },
+            fvents(){
+                return this.events.filter(item=> item.deleted===false)
             }
         },
         created () {
@@ -297,6 +305,11 @@
                 this.event = {};
                 this.files = [];
                 this.eventFiles = [];
+            },
+            deleteEvent(){
+                this.dialog = false;
+                this.event.deleted = true;
+                this.saveEvent();
             },
 
             saveEvent () {
@@ -339,6 +352,7 @@
             getEvents () {
                 user_api.get_eventsApi().then((res)=>{
                     this.events = res.data;
+                    console.log(this.events)
                 });
             },
 

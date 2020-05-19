@@ -124,9 +124,11 @@
                     src:''
                 },
                 {
-                    isPowerBI:false,
+
+                    isPowerBI: false,
                     icon: 'mdi-handshake',
                     text: 'Государственно-частное партнерство',
+                    path:'calendar',
                     src:''
 
                 },
