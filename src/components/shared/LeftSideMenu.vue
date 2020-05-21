@@ -25,7 +25,7 @@
                                 </v-list-item>
 
                         </template>
-                        <v-list-group v-else  prepend-icon="mdi-school" value="true">
+                        <v-list-group v-else  prepend-icon="mdi-school">
                             <template v-slot:activator>
                                 <v-list-item-content>
                                     <v-list-item-action-text>
@@ -124,9 +124,11 @@
                     src:''
                 },
                 {
-                    isPowerBI:false,
+
+                    isPowerBI: false,
                     icon: 'mdi-handshake',
                     text: 'Государственно-частное партнерство',
+                    path:'calendar',
                     src:''
 
                 },
