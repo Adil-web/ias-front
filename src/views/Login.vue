@@ -22,7 +22,14 @@
                         <v-card-text>
                             <v-form>
                                 <v-text-field  prepend-icon="mdi-logout" name="login" placeholder="Логин" type="text" v-model="username"></v-text-field>
-                                <v-text-field id="password" prepend-icon="mdi-security" name="password" placeholder="Пароль" type="password" v-model="password"></v-text-field>
+                                <v-text-field id="password"
+                                              prepend-icon="mdi-security"
+                                              name="password"
+                                              placeholder="Пароль"
+                                              type="password"
+                                              v-model="password"
+                                              v-on:keypress.enter="submit"
+                                ></v-text-field>
                             </v-form>
                         </v-card-text>
                         <v-card-actions class="pb-5">
