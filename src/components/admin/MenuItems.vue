@@ -1,253 +1,294 @@
 <template>
+    <v-data-table
+            dense
+            :headers="headers"
+            :items="menuItems"
+            :single-expand="true"
+            show-expand
+            class="elevation-1"
+    >
+        <template v-slot:top>
+            <v-toolbar flat color="white">
+                <!--                <v-toolbar-title></v-toolbar-title>-->
+
+                <v-text-field
+                        v-model="search"
+                        append-icon="mdi-magnify"
+                        label="Search"
+                        single-line
+                        hide-details
+                ></v-text-field>
+                <v-spacer></v-spacer>
+                <v-dialog v-model="dialog" max-width="500px">
+                    <template v-slot:activator="{ on }">
+                        <v-btn color="primary" dark class="mb-2" v-on="on">Новая пользователь</v-btn>
+                    </template>
+                    <v-card>
+                        <v-card-title>
+                            <span class="headline">{{ formTitle }}</span>
+                        </v-card-title>
+                        <v-card-text>
+                            <v-container>
+                                <v-row>
+                                    <v-col cols="12" sm="6" md="4">
+                                        <v-text-field
+                                                v-model="menuItem.title"
+                                                label="Legal menu item name*"
+                                                hint="please insert legal menu item name"
+                                                persistent-hint
+                                                required
+                                        ></v-text-field>
+                                    </v-col>
+                                    <v-col cols="12" sm="6" md="4">
+                                        <v-text-field
+                                                v-model="menuItem.icon"
+                                                label="Legal src*"
+                                                persistent-hint
+                                                required
+                                        ></v-text-field>
+                                    </v-col>
+                                    <v-col cols="12" sm="6" md="4">
+                                        <v-text-field
+                                                v-model="menuItem.path"
+                                                label="path"
+                                        ></v-text-field>
+                                    </v-col>
+                                    <v-col cols="12" sm="6" md="4">
+                                        <v-text-field
+                                                v-model="menuItem.src"
+                                                label="src"
+                                        ></v-text-field>
+                                    </v-col>
+<!--                                    <v-col cols="12" sm="6" md="4">-->
+<!--                                        <v-text-field v-model="user.email" label="Email*" required></v-text-field>-->
+<!--                                    </v-col>-->
+<!--                                    <v-col cols="12">-->
+<!--                                        <v-text-field v-model="user.password" label="Password*" type="password" required></v-text-field>-->
+<!--                                    </v-col>-->
+<!--                                    <v-col cols="12" sm="6">-->
+<!--                                        <v-select-->
+<!--                                                v-model="user.role_id"-->
+<!--                                                hint="Роль"-->
+<!--                                                :items="roles"-->
+<!--                                                item-text="text"-->
+<!--                                                item-value="id"-->
+<!--                                                label="Выбор роли"-->
+<!--                                                persistent-hint-->
+<!--                                                single-line-->
+<!--                                                required-->
+<!--                                        ></v-select>-->
+<!--                                    </v-col>-->
+                                </v-row>
+                            </v-container>
+                            <small>*indicates required field</small>
+                        </v-card-text>
+                        <v-card-actions>
+                            <v-spacer></v-spacer>
+                            <v-btn color="blue darken-1" text @click="close">Cancel</v-btn>
+                            <v-btn color="blue darken-1" text @click="save">Save</v-btn>
+                        </v-card-actions>
+                    </v-card>
+                </v-dialog>
+            </v-toolbar>
+        </template>
+        <template v-slot:item.data-table-expand="{ item, isExpanded, expand }">
+            <v-btn @click="expand(true)" v-if="item.menuItemList.length>0 && !isExpanded">Больше</v-btn>
+            <v-btn @click="expand(false)" v-if="item.menuItemList.length>0 && isExpanded">Больше</v-btn>
+        </template>
+        <template v-slot:expanded-item="{ headers, item }">
             <v-data-table
-                    v-model="selected"
+                    dense
                     :headers="headers"
-                    :items="treats"
-                    :pagination.sync="pagination"
-                    expand="true"
-                    select-all
-                    item-key="category"
+                    :items="item.menuItemList"
                     class="elevation-1"
-                    hide-actions
             >
-
-                <template v-slot:items="props">
-                    <tr @click="props.expanded = !props.expanded">
-                        <td>
-                            <!-- This one should select every items under the expand slot -->
-                            <v-checkbox
-                                    @click.stop="props.selected = !props.selected"
-                                    :input-value="props.selected"
-                                    primary
-                                    hide-details
-                            ></v-checkbox>
-                        </td>
-                        <td class="text-xs-right">{{ props.item.category }}</td>
-                    </tr>
-                </template>
-
-                <template v-slot:expand="props">
-                    <v-data-table
-                            v-model="selected"
-                            :headers="headers"
-                            :items="props.item.food"
-                            :pagination.sync="pagination"
-                            expand="true"
-                            select-all
-                            item-key="category"
-                            class="elevation-1"
-                            hide-actions
+                <template v-slot:item.actions="{ item }">
+                    <v-icon
+                            small
+                            class="mr-2"
+                            @click="editItem(item)"
                     >
-                        <!-- I should be able to hide headers and have the parent row checkbox act like the select all headers' checkbox -->
-                        <template v-slot:items="props">
-                            <tr @click="props.expanded = !props.expanded">
-                                <td>
-                                    <v-checkbox
-                                            :input-value="props.selected"
-                                            primary
-                                            hide-details
-                                    ></v-checkbox>
-                                </td>
-                                <td>{{ props.item.name }}</td>
-                                <td class="text-xs-right">{{ props.item.calories }}</td>
-                                <td class="text-xs-right">{{ props.item.fat }}</td>
-                                <td class="text-xs-right">{{ props.item.carbs }}</td>
-                                <td class="text-xs-right">{{ props.item.protein }}</td>
-                                <td class="text-xs-right">{{ props.item.iron }}</td>
-                            </tr>
-                        </template>
-                    </v-data-table>
+                        mdi-pencil
+                    </v-icon>
+                    <v-icon
+                            small
+                            @click="deleteItem(item)"
+                    >
+                        mdi-delete
+                    </v-icon>
                 </template>
             </v-data-table>
+        </template>
+        <template v-slot:item.actions="{ item }">
+            <v-icon
+                    small
+                    class="mr-2"
+                    @click="editItem(item)"
+            >
+                mdi-pencil
+            </v-icon>
+            <v-icon
+                    small
+                    @click="deleteItem(item)"
+            >
+                mdi-delete
+            </v-icon>
+        </template>
+    </v-data-table>
 </template>
 
 <script>
     import Vue from 'vue'
     import user_api from "../../api/user_api";
     import items_api from "../../api/items_api";
+
+
     export default {
         name: 'MenuItems',
-        // data: () => ({
-        //     search:'',
-        //     users:[],
-        //     bis:[],
-        //     roles:[ {id: 1,name: 'ROLE_ADMIN',text:'Администратор'}, {id: 2,name: 'ROLE_USER',text:'Пользователь'}],
-        //     user:{},
-        //     bi:{},
-        //
-        //     dialog: false,
-        //     headers: [
-        //         { text: 'Наименование', align: 'start', sortable: false, value: 'title',},
-        //         { text: 'url адресс', value: 'src'},
-        //         // { text: 'Фамилия', value: 'surname' },
-        //         // { text: 'Отчество', value: 'patronymic' },
-        //         // { text: 'Почта', value: 'email' },
-        //         // { text: 'Роль', value: 'role.name' },
-        //         // { text: 'Пароль', value: 'password' },
-        //         { text: 'Действия', value: 'actions', sortable: false },
-        //     ],
-        // }),
-        //
-        //
-        //
-        //
-        // computed: {
-        //     // formTitle () {
-        //     //     return this.user.id === undefined ? 'New Item' : 'Edit Item'
-        //     // },
-        //     formTitle () {
-        //         return this.bi.id === undefined ? 'New Item' : 'Edit Item'
-        //     },
-        //     // sessionUser:{
-        //     //     get(){
-        //     //         return this.$store.state.user;
-        //     //     },
-        //     //     set (val) {
-        //     //         return this.$store.state.user = val
-        //     //     }
-        //     // },
-        // },
-        //
-        //
-        //
-        // watch: {
-        //     dialog (val) {
-        //         val || this.close()
-        //     },
-        // },
-        //
-        // created () {
-        //     // this.getUsers();
-        //     this.getBis();
-        // },
-        //
-        // methods: {
-        //     // getUsers(){
-        //     //     user_api.getUsersApi(false).then(response=>{ this.users=response.data });
-        //     // },
-        //     getBis(){
-        //         items_api.getMenuItems().then(rs=>{
-        //             this.bis = rs.data;
-        //             console.log(this.bis)
-        //         })
-        //     },
-        //
-        //
-        //
-        //     editItem (userItem) {
-        //         this.user = Object.assign({}, userItem)
-        //         this.dialog = true
-        //     },
-        //
-        //     deleteItem (userItem) {
-        //         if(this.sessionUser.id===userItem.id){
-        //             alert("Невозможно удалить свою же учетную запись"); return ''
-        //         }
-        //         else if  (confirm('Вы уверены что хотите удалить пользователя?')){
-        //             user_api.deleteUserApi(userItem.id, true, userItem.role_id)
-        //                 .then(()=>{
-        //                     const index = this.users.indexOf(userItem);
-        //                     this.users.splice(index,1)
-        //                 }).catch(er=>{
-        //                 alert(er.response.data.message)
-        //             })
-        //         } else {
-        //             console.log("Не удалось удалить пользователя")
-        //         }
-        //     },
-        //
-        //     close () {
-        //         this.dialog = false;
-        //         this.user={};
-        //     },
-        //
-        //     save () {
-        //         if (this.user.id === undefined) {
-        //             console.log(this.user)
-        //             user_api.createUserApi(this.user).then((response)=>{
-        //                 this.users.push(response.data);
-        //                 this.close();
-        //             }).catch(er=>alert(er.response.data.message))
-        //
-        //         } else {
-        //             user_api.editUserApi(this.user).then((response)=>{
-        //                 Vue.set(this.users, this.users.findIndex(item=>item.id === response.data.id), response.data );
-        //                 this.close();
-        //             });
-        //         }
-        //
-        //     },
-        // },
-
         data: () => ({
-            pagination: {
-                sortBy: 'name'
-            },
-            selected: [],
+            search: '',
+            users: [],
+            menuItems: [],
+            roles: [{id: 1, name: 'ROLE_ADMIN', text: 'Администратор'}, {
+                id: 2,
+                name: 'ROLE_USER',
+                text: 'Пользователь'
+            }],
+            user: {},
+            menuItem: {},
+
+            dialog: false,
             headers: [
-                {
-                    text: 'Dessert (100g serving)',
-                    align: 'left',
-                    value: 'name'
-                },
-                { text: 'Calories', value: 'calories' },
-                { text: 'Fat (g)', value: 'fat' },
-                { text: 'Carbs (g)', value: 'carbs' },
-                { text: 'Protein (g)', value: 'protein' },
-                { text: 'Iron (%)', value: 'iron' }
+                {text: 'Наименование', align: 'start', sortable: false, value: 'title',},
+                {text: 'url адресс', value: 'src'},
+                // { text: 'Фамилия', value: 'surname' },
+                // { text: 'Отчество', value: 'patronymic' },
+                // { text: 'Почта', value: 'email' },
+                // { text: 'Роль', value: 'role.name' },
+                // { text: 'Пароль', value: 'password' },
+                {text: 'Действия', value: 'actions', sortable: false},
+                { text: '', value: 'data-table-expand' },
             ],
-            treats: [
-                {
-                    category: 'Desserts',
-                    food: [
-                        {
-                            name: 'Frozen Yogurt',
-                            calories: 159,
-                            fat: 6.0,
-                            carbs: 24,
-                            protein: 4.0,
-                            iron: '1%'
-                        },
-                        {
-                            name: 'Ice cream sandwich',
-                            calories: 237,
-                            fat: 9.0,
-                            carbs: 37,
-                            protein: 4.3,
-                            iron: '1%'
-                        },
-                        {
-                            name: 'Cupcake',
-                            calories: 305,
-                            fat: 3.7,
-                            carbs: 67,
-                            protein: 4.3,
-                            iron: '8%'
-                        }
-                    ]
-                },
-                {
-                    category: 'Entries',
-                    food: [
-                        {
-                            name: 'Melon',
-                            calories: 159,
-                            fat: 6.0,
-                            carbs: 24,
-                            protein: 4.0,
-                            iron: '1%'
-                        },
-                        {
-                            name: 'Hummus',
-                            calories: 237,
-                            fat: 9.0,
-                            carbs: 37,
-                            protein: 4.3,
-                            iron: '1%'
-                        }
-                    ]
+        }),
+
+
+        computed: {
+            // formTitle () {
+            //     return this.user.id === undefined ? 'New Item' : 'Edit Item'
+            // },
+            formTitle() {
+                return this.menuItem.id === undefined ? 'New Item' : 'Edit Item'
+            },
+            // sessionUser:{
+            //     get(){
+            //         return this.$store.state.user;
+            //     },
+            //     set (val) {
+            //         return this.$store.state.user = val
+            //     }
+            // },
+        },
+
+
+        watch: {
+            dialog(val) {
+                val || this.close()
+            },
+        },
+
+        created() {
+            // this.getUsers();
+            this.getMenuItemsWithPromise().then(items=>{
+                this.menuItems = items;
+            });
+        },
+
+        methods: {
+
+            getMenuItemsWithPromise() {
+                return new Promise((resolve, reject) => {
+                    items_api.getMenuItems()
+                        .then( rs => {
+                            resolve(rs.data);
+                        }).catch( er => {
+                        reject(er);
+                    })
+                })
+            },
+
+            // editItem(userItem) {
+            //     this.user = Object.assign({}, userItem)
+            //     this.dialog = true
+            // },
+
+            editItem(menuItem) {
+                this.menuItem = Object.assign({}, menuItem)
+                this.dialog = true
+            },
+
+            // deleteItem(userItem) {
+            //     if (this.sessionUser.id === userItem.id) {
+            //         alert("Невозможно удалить свою же учетную запись");
+            //         return ''
+            //     } else if (confirm('Вы уверены что хотите удалить пользователя?')) {
+            //         user_api.deleteUserApi(userItem.id, true, userItem.role_id)
+            //             .then(() => {
+            //                 const index = this.users.indexOf(userItem);
+            //                 this.users.splice(index, 1)
+            //             }).catch(er => {
+            //             alert(er.response.data.message)
+            //         })
+            //     } else {
+            //         console.log("Не удалось удалить пользователя")
+            //     }
+            // },
+
+            // close() {
+            //     this.dialog = false;
+            //     this.user = {};
+            // },
+
+            close() {
+                this.dialog = false;
+                this.menuItem = {};
+            },
+
+            // save() {
+            //     if (this.user.id === undefined) {
+            //         user_api.createUserApi(this.user).then((response) => {
+            //             this.users.push(response.data);
+            //             this.close();
+            //         }).catch(er => alert(er.response.data.message))
+            //
+            //     } else {
+            //         user_api.editUserApi(this.user).then((response) => {
+            //             Vue.set(this.users, this.users.findIndex(item => item.id === response.data.id), response.data);
+            //             this.close();
+            //         });
+            //     }
+            //
+            // },
+
+            save() {
+                if (this.menuItem.id === undefined) {
+                    items_api.createMenuItemApi(this.menuItem).then(() => {
+                        this.getMenuItemsWithPromise().then(items => {
+                            this.menuItems = items;
+                            this.close();
+                        })
+                    }).catch(er => alert(er.response.data.message))
+
+                } else {
+                    items_api.editMenuItemApi(this.menuItem).then(() => {
+                        this.getMenuItemsWithPromise().then(items => {
+                            this.menuItems = items;
+                            this.close();
+                        })
+                    }).catch(er => alert(er.response.data.message))
                 }
-            ]
-        })
+
+            },
+        },
+
     }
 </script>
