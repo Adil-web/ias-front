@@ -19,10 +19,10 @@ const store = new Vuex.Store({
     },
     state: {
         user: null,
-        isAuthenticated:false,
+        isAuthenticated: false,
         // emptyAvatar: require('@/assets/empty-avatar.png'),
         // first: null,
-        langList: [
+        langList:[
             {
                 code: 'ru',
                 shortName: 'РУС',
@@ -34,7 +34,15 @@ const store = new Vuex.Store({
                 name: 'Қазақша'
             }
         ],
-        drawer:true,
+        dictionary: {
+            ru: {
+                 title: 'Информационно-аналитическая система',
+            },
+            kk: {
+                 title:'Акпараттык-аналитикалык жуйе',
+            },
+        },
+        drawer: true,
         // sidebar: true,
         // sbTemporary: false,
         // idxMenu: 0,

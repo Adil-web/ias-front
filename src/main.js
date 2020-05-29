@@ -3,10 +3,10 @@ import App from './App.vue'
 import vuetify from './plugins/vuetify';
 import axios from 'axios';
 import VueI18n from 'vue-i18n'
-import messages from './assets/messages'
 import { LMap, LTileLayer, LMarker } from 'vue2-leaflet';
 import 'leaflet/dist/leaflet.css';
 import { Icon } from 'leaflet';
+import dictionary_api from "./api/dictionary_api";
 
 delete Icon.Default.prototype._getIconUrl;
 Icon.Default.mergeOptions({
@@ -40,14 +40,22 @@ import router from '@/router/router'
 // Локально
 axios.defaults.baseURL='http://localhost:8090/ap/v1';
 
+// dictionary_api.getWordsApi().then(rs=>{
+//   console.log(rs.data)
+//   store.state.dictionaryWords.kk = rs.data;
+//
+// });
+
+
 
 Vue.config.productionTip = false;
 Vue.use(VueI18n);
 
+console.log(store.state.dictionary)
 let defLocale = sessionStorage.getItem('ias-locale');
 const i18n = new VueI18n({
   locale: defLocale || 'ru',
-  messages,
+  messages : store.state.dictionary,
   silentTranslationWarn: true
 });
 
