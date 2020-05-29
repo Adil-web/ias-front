@@ -17,6 +17,7 @@ import MainLayout from '@/components/shared/MainLayout';
 import Calendar from '@/components/shared/Calendar';
 import AdminLayout from "@/components/admin/AdminLayout";
 import MenuItems from "../components/admin/MenuItems";
+import Dictionary from "../components/admin/Dictionary";
 
 Vue.use(VueRouter);
 
@@ -60,6 +61,9 @@ const router =  new VueRouter({
                 },
                 {
                     path: 'menuitems', name: 'menuitems', component: MenuItems
+                },
+                {
+                    path: 'dictionary', name: 'dictionary', component: Dictionary
                 }
             ]
         },
