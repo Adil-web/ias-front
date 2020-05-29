@@ -44,6 +44,7 @@
                 { icon: ' mdi-account-multiple', text: 'Пользователи', path:'/admin/users' },
                 { icon: 'mdi-delete-variant ', text: 'Корзина' ,path:'/admin/organizations'},
                 { icon: 'mdi-delete-variant ', text: 'Корзина' ,path:'/admin/menuitems'},
+                { icon: 'mdi-delete-variant ', text: 'Корзина' ,path:'/admin/dictionary'},
 
             ],
         }),
