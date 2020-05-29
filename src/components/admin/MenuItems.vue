@@ -59,25 +59,6 @@
                                                 label="src"
                                         ></v-text-field>
                                     </v-col>
-<!--                                    <v-col cols="12" sm="6" md="4">-->
-<!--                                        <v-text-field v-model="user.email" label="Email*" required></v-text-field>-->
-<!--                                    </v-col>-->
-<!--                                    <v-col cols="12">-->
-<!--                                        <v-text-field v-model="user.password" label="Password*" type="password" required></v-text-field>-->
-<!--                                    </v-col>-->
-<!--                                    <v-col cols="12" sm="6">-->
-<!--                                        <v-select-->
-<!--                                                v-model="user.role_id"-->
-<!--                                                hint="Роль"-->
-<!--                                                :items="roles"-->
-<!--                                                item-text="text"-->
-<!--                                                item-value="id"-->
-<!--                                                label="Выбор роли"-->
-<!--                                                persistent-hint-->
-<!--                                                single-line-->
-<!--                                                required-->
-<!--                                        ></v-select>-->
-<!--                                    </v-col>-->
                                 </v-row>
                             </v-container>
                             <small>*indicates required field</small>
@@ -92,8 +73,10 @@
             </v-toolbar>
         </template>
         <template v-slot:item.data-table-expand="{ item, isExpanded, expand }">
-            <v-btn @click="expand(true)" v-if="item.menuItemList.length>0 && !isExpanded">Больше</v-btn>
-            <v-btn @click="expand(false)" v-if="item.menuItemList.length>0 && isExpanded">Больше</v-btn>
+            <span v-if="item.menuItemList.length>0">
+                <v-icon small @click="expand(true)" v-if="!isExpanded">{{isExpanded ? 'mdi-arrow-expand-up': 'mdi-arrow-expand-down' }}</v-icon>
+                <v-icon small @click="expand(false)" v-if="isExpanded">{{isExpanded ? 'mdi-arrow-expand-up': 'mdi-arrow-expand-down' }}</v-icon>
+            </span>
         </template>
         <template v-slot:expanded-item="{ headers, item }">
             <v-data-table
@@ -132,6 +115,12 @@
                     @click="deleteItem(item)"
             >
                 mdi-delete
+            </v-icon>
+            <v-icon
+                    small
+                    @click="addChildren(item)"
+            >
+                mdi-plus
             </v-icon>
         </template>
     </v-data-table>
@@ -204,7 +193,6 @@
         },
 
         methods: {
-
             getMenuItemsWithPromise() {
                 return new Promise((resolve, reject) => {
                     items_api.getMenuItems()
@@ -214,6 +202,11 @@
                         reject(er);
                     })
                 })
+            },
+
+            addChildren(item){
+                this.menuItem.parent_id = item.id;
+                this.dialog=true;
             },
 
             // editItem(userItem) {
@@ -270,6 +263,9 @@
             // },
 
             save() {
+                // console.log(this.menuItem)
+            //     alert("dsadad")
+            //     console.log(this.menuItem)
                 if (this.menuItem.id === undefined) {
                     items_api.createMenuItemApi(this.menuItem).then(() => {
                         this.getMenuItemsWithPromise().then(items => {
@@ -287,7 +283,7 @@
                     }).catch(er => alert(er.response.data.message))
                 }
 
-            },
+            }
         },
 
     }
