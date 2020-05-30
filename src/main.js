@@ -40,30 +40,40 @@ import router from '@/router/router'
 // Локально
 axios.defaults.baseURL='http://localhost:8090/ap/v1';
 
-// dictionary_api.getWordsApi().then(rs=>{
-//   console.log(rs.data)
-//   store.state.dictionaryWords.kk = rs.data;
-//
-// });
+
+getDictionary().then( words => {
+  store.state.dictionary = words;
+  Vue.config.productionTip = false;
+  Vue.use(VueI18n);
 
 
+  let defLocale = sessionStorage.getItem('ias-locale');
+  const i18n = new VueI18n({
+    locale: defLocale || 'ru',
+    messages: store.state.dictionary,
+    silentTranslationWarn: true
+  });
 
-Vue.config.productionTip = false;
-Vue.use(VueI18n);
 
-console.log(store.state.dictionary)
-let defLocale = sessionStorage.getItem('ias-locale');
-const i18n = new VueI18n({
-  locale: defLocale || 'ru',
-  messages : store.state.dictionary,
-  silentTranslationWarn: true
+  new Vue({
+    router,
+    store,
+    vuetify,
+    i18n,
+    render: h => h(App)
+  }).$mount('#app');
 });
 
 
-new Vue({
-  router,
-  store,
-  vuetify,
-  i18n,
-  render: h => h(App)
-}).$mount('#app');
+
+
+function getDictionary() {
+    return new Promise((resolve, reject) => {
+        dictionary_api.getWordsApi()
+            .then(rs => {
+              resolve(rs.data)
+            }).catch(err=>{
+              reject(err)
+        })
+    })
+}

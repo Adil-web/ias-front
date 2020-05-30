@@ -34,14 +34,7 @@ const store = new Vuex.Store({
                 name: 'Қазақша'
             }
         ],
-        dictionary: {
-            ru: {
-                 title: 'Информационно-аналитическая система',
-            },
-            kk: {
-                 title:'Акпараттык-аналитикалык жуйе',
-            },
-        },
+        dictionary: {},
         drawer: true,
         // sidebar: true,
         // sbTemporary: false,

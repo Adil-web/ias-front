@@ -1,89 +1,84 @@
 <template>
-    <v-simple-table dense>
-        <template v-slot:default>
-            <thead>
-            <tr>
-                <th class="text-left">NameRu</th>
-                <th class="text-left"></th>
-                <th class="text-left">NameKz</th>
-            </tr>
-            </thead>
-            <tbody>
+        <v-simple-table dense>
 
-            <v-dialog v-model="dialog" max-width="400px">
-                <v-card height="200">
-                    <v-container>
-                        <v-row align="stretch">
-                            <v-col>
-                                <v-form
-                                        @submit.prevent="changeWords"
-                                        ref="form"
-                                        v-model="valid"
-                                        :lazy-validation="lazy">
-                                    <v-container>
-                                        <v-row>
+            <template v-slot:default>
+                <thead>
+                <tr>
+                    <th class="text-left">NameRu</th>
+                    <th class="text-left">NameKz</th>
+                </tr>
+                </thead>
+                <tbody>
 
-                                            <v-col>
-                                                <v-text-field
-                                                        v-model="newKey"
-                                                        label="ru"
-                                                        placeholder="Placeholder"
-                                                        outlined
-                                                        dense
-                                                        required
-                                                        :rules="rules"
-                                                ></v-text-field>
-                                            </v-col>
+                <div v-if="dialog">
+                    <v-dialog v-model="dialog" max-width="400px">
+                        <v-card height="200">
+                            <v-container>
+                                <v-row align="stretch">
+                                    <v-col>
+                                        <v-form>
+                                            <v-container>
+                                                <v-row>
+                                                    <v-col>
+                                                        <v-text-field
+                                                                v-model="wordsCopy.ru[currentKey]"
+                                                                label="ru"
+                                                                placeholder="Placeholder"
+                                                                outlined
+                                                                dense
+                                                                required
+                                                                :rules="rules"
+                                                        ></v-text-field>
+                                                    </v-col>
 
-                                            <v-col>
-                                                <v-text-field
-                                                        v-model="newValue"
-                                                        label="kz"
-                                                        placeholder="Placeholder"
-                                                        outlined
-                                                        dense
-                                                        required
-                                                        :rules="rules"
-                                                ></v-text-field>
-                                            </v-col>
+                                                    <v-col>
+                                                        <v-text-field
+                                                                v-model="wordsCopy.kk[currentKey]"
+                                                                label="kz"
+                                                                placeholder="Placeholder"
+                                                                outlined
+                                                                dense
+                                                                required
+                                                                :rules="rules"
+                                                        ></v-text-field>
+                                                    </v-col>
 
-                                        </v-row>
-                                    </v-container>
-                                    <v-btn :disabled="!valid" color="success" class="mr-4" type="submit" @click.stop="dialog = false">
-                                        добавить
-                                    </v-btn>
-                                </v-form>
-                            </v-col>
-                        </v-row>
-                    </v-container>
-                </v-card>
-            </v-dialog>
-
-            <tr v-for="(item, index) in Object.keys(words.ru)" :key="index">
-                <td>{{ words.ru[item]}}</td>
-                <td>
-                    <v-icon
-                            small
-                            class="mr-2"
-                            @click="openDialog( item, words.ru[item], 'ru' )"
-                    >
-                        mdi-pencil
-                    </v-icon>
-                </td>
-<!--                <td>{{ words.kk[item] }}</td>-->
-<!--                <td>-->
-<!--                    <v-icon-->
-<!--                            small-->
-<!--                            class="mr-2"-->
-
-<!--                    >-->
-<!--                        mdi-pencil-->
-<!--                    </v-icon>-->
-<!--                </td>-->
-            </tr>
-            </tbody>
-        </template>
-    </v-simple-table>
+                                                </v-row>
+                                            </v-container>
+                                            <v-btn :disabled="wordsCopy.ru[currentKey]==='' ||  wordsCopy.kk[currentKey] ==='' "
+                                                   color="success" class="mr-4" type="button"
+                                                   @click.stop="changeWords">
+                                                добавить
+                                            </v-btn>
+                                            <v-btn
+                                                    color="warning"
+                                                    @click.stop="dialog=false"
+                                            >
+                                                Закрыть
+                                            </v-btn>
+                                        </v-form>
+                                    </v-col>
+                                </v-row>
+                            </v-container>
+                        </v-card>
+                    </v-dialog>
+                </div>
+                <tr v-for="(item, index) in Object.keys(words.ru)" :key="index">
+                    <td>{{ words.ru[item]}}</td>
+                    <td>{{ words.kk[item] }}</td>
+                    <td>
+                        <v-icon
+                                small
+                                class="mr-2"
+                                @click="editItem( item )"
+                        >
+                            mdi-pencil
+                        </v-icon>
+                    </td>
+                </tr>
+                </tbody>
+            </template>
+        </v-simple-table>
 </template>
 
 
@@ -94,36 +89,24 @@
         name: 'Dictionary',
         data() {
             return {
+                wordsCopy: {},
                 dialog: false,
-
-                currentKey:'',
-                currentValue:'',
-                currentLocale: '',
-
-                newKey: '',
-                newValue: '',
-
-                rules: [v => !!v || 'Field is required'],
-                valid: true,
-                lazy:false
+                currentKey: '',
+                rules: [v => !!v || 'Поле обязательное']
             }
         },
         methods: {
 
-            openDialog(key, value, locale) {
+            editItem(key) {
+                this.wordsCopy = JSON.parse(JSON.stringify(this.words));
                 this.currentKey = key;
-                this.currentValue = value;
-                this.currentLocale = locale;
                 this.dialog = true;
             },
 
-            changeWords(){
-                let wordsCopy = Object.assign({}, this.words);
-                wordsCopy[this.currentLocale][this.currentKey] = this.newKey;
-                console.log(wordsCopy[this.currentLocale][this.currentKey])
-                // wordsCopy..[this.newKey] = this.newValue;
-                // delete wordsCopy[this.currentKey];
-                // dictionary_api.changeDictionary()
+            changeWords() {
+                dictionary_api.changeDictionary(this.wordsCopy).then(rs => {
+                    this.words = rs.data;
+                })
             }
         },
 
@@ -137,9 +120,5 @@
                 }
             },
         },
-        created() {
-            console.log(this.words)
-
-        }
     }
 </script>
