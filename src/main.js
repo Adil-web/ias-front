@@ -3,9 +3,15 @@ import App from './App.vue'
 import vuetify from './plugins/vuetify';
 import axios from 'axios';
 import VueI18n from 'vue-i18n'
+
+
 import { LMap, LTileLayer, LMarker } from 'vue2-leaflet';
 import 'leaflet/dist/leaflet.css';
 import { Icon } from 'leaflet';
+Vue.component('l-map', LMap);
+Vue.component('l-tile-layer', LTileLayer);
+Vue.component('l-marker', LMarker);
+
 import dictionary_api from "./api/dictionary_api";
 
 delete Icon.Default.prototype._getIconUrl;
@@ -15,9 +21,7 @@ Icon.Default.mergeOptions({
   shadowUrl: require('leaflet/dist/images/marker-shadow.png'),
 });
 
-Vue.component('l-map', LMap);
-Vue.component('l-tile-layer', LTileLayer);
-Vue.component('l-marker', LMarker);
+
 
 
 

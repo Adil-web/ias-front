@@ -3,15 +3,11 @@ import authHeader from './data-service';
 
 
 
-const UPLOAD_FILE='/api/test/uploadFile';
-const UPLOAD_FILES='/api/test/uploadMultipleFiles';
-const DOWNLOAD_FILE='/api/test/downloadFile';
-const GET_FILES='/api/test/get_files';
-// const REMOVE_USER='/api/test/remove';
-// const GET_CURRENT_SESSION_USER='/api/auth/get_session_user';
-// const GET_EVENTS='/api/test/events';
-// const ADD_EVENT='/api/test/add_event';
-// const EDIT_EVENT='/api/test/edit_event';
+const UPLOAD_FILE='/api/file/uploadFile';
+const UPLOAD_FILES='/api/file/uploadMultipleFiles';
+const DOWNLOAD_FILE='/api/file/downloadFile';
+const GET_FILES='/api/file/get_files';
+
 
 export default {
 

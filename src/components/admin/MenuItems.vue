@@ -1,5 +1,7 @@
 <template>
+    <div>
     <v-data-table
+            :search="search"
             dense
             :headers="headers"
             :items="menuItems"
@@ -17,61 +19,68 @@
                         hide-details
                 ></v-text-field>
                 <v-spacer></v-spacer>
-<!--                <v-dialog v-model="dialog" max-width="500px">-->
-<!--                    <template v-slot:activator="{ on }">-->
-<!--                        <v-btn color="primary" dark class="mb-2" v-on="on">Создать</v-btn>-->
-<!--                    </template>-->
-<!--                    <v-card>-->
-<!--                        <v-card-title>-->
-<!--                            <span class="headline">{{ formTitle }}</span>-->
-<!--                        </v-card-title>-->
-<!--                        <v-card-text>-->
-<!--                            <v-container>-->
-<!--                                <v-row>-->
-<!--                                    <v-col cols="12" sm="6" md="4">-->
-<!--                                        <v-text-field-->
-<!--                                                v-model="menuItem.title"-->
-<!--                                                label="Legal menu item name*"-->
-<!--                                                hint="please insert legal menu item name"-->
-<!--                                                persistent-hint-->
-<!--                                                required-->
-<!--                                        ></v-text-field>-->
-<!--                                    </v-col>-->
-<!--                                    <v-col cols="12" sm="6" md="4">-->
-<!--                                        <v-text-field-->
-<!--                                                v-model="menuItem.icon"-->
-<!--                                                label="Legal src*"-->
-<!--                                                persistent-hint-->
-<!--                                                required-->
-<!--                                        ></v-text-field>-->
-<!--                                    </v-col>-->
-<!--                                    <v-col cols="12" sm="6" md="4">-->
-<!--                                        <v-text-field-->
-<!--                                                v-model="menuItem.path"-->
-<!--                                                label="path"-->
-<!--                                        ></v-text-field>-->
-<!--                                    </v-col>-->
-<!--                                    <v-col cols="12" sm="6" md="4">-->
-<!--                                        <v-text-field-->
-<!--                                                v-model="menuItem.src"-->
-<!--                                                label="src"-->
-<!--                                        ></v-text-field>-->
-<!--                                    </v-col>-->
-<!--                                </v-row>-->
-<!--                            </v-container>-->
-<!--                            <small>*indicates required field</small>-->
-<!--                        </v-card-text>-->
-<!--                        <v-card-actions>-->
-<!--                            <v-spacer></v-spacer>-->
-<!--                            <v-btn color="blue darken-1" text @click="close">Cancel</v-btn>-->
-<!--                            <v-btn color="blue darken-1" text @click="save">Save</v-btn>-->
-<!--                        </v-card-actions>-->
-<!--                    </v-card>-->
-<!--                </v-dialog>-->
+                <v-dialog v-model="dialog" max-width="500px">
+                    <template v-slot:activator="{ on }">
+                        <v-btn color="primary" dark class="mb-2" v-on="on">Создать</v-btn>
+                    </template>
+                    <v-card>
+                        <v-card-title>
+
+                            <span class="headline">{{ formTitle }}</span>
+                        </v-card-title>
+                        <v-card-text>
+                            <v-container>
+                                <v-row>
+                                    <v-col>
+                                        <v-text-field
+                                                v-model="menuItem.title"
+                                                label="Legal menu item name*"
+                                                hint="please insert legal menu item name"
+                                                persistent-hint
+                                                required
+                                        ></v-text-field>
+                                    </v-col>
+                                </v-row>
+                                <v-row>
+                                    <v-col>
+                                        <v-text-field
+                                                v-model="menuItem.icon"
+                                                label="Иконка"
+                                                persistent-hint
+                                                required
+                                        ></v-text-field>
+                                    </v-col>
+                                </v-row>
+                                <v-row>
+                                    <v-col cols="12" sm="6" md="4">
+                                        <v-text-field
+                                                v-model="menuItem.path"
+                                                label="path"
+                                        ></v-text-field>
+                                    </v-col>
+                                </v-row>
+                                <v-row>
+                                    <v-col>
+                                        <v-text-field
+                                                v-model="menuItem.src"
+                                                label="src"
+                                        ></v-text-field>
+                                    </v-col>
+                                </v-row>
+                            </v-container>
+                            <small>*indicates required field</small>
+                        </v-card-text>
+                        <v-card-actions>
+                            <v-spacer></v-spacer>
+                            <v-btn color="blue darken-1" text @click="close">Cancel</v-btn>
+                            <v-btn color="blue darken-1" text @click="save">Save</v-btn>
+                        </v-card-actions>
+                    </v-card>
+                </v-dialog>
             </v-toolbar>
         </template>
         <template v-slot:item.data-table-expand="{ item, isExpanded, expand }">
-            <span v-if="item.menuItemList.length>0">
+            <span v-if="item.children.length>0">
                 <v-icon v-if="isExpanded" small @click="expand(false)" >{{isExpanded ? 'mdi-arrow-expand-up': 'mdi-arrow-expand-down' }}</v-icon>
                 <v-icon v-else small @click="expand(true)">{{isExpanded ? 'mdi-arrow-expand-up': 'mdi-arrow-expand-down' }}</v-icon>
             </span>
@@ -80,7 +89,7 @@
             <v-data-table
                     dense
                     :headers="headers"
-                    :items="item.menuItemList"
+                    :items="item.children"
                     class="elevation-1"
             >
                 <template v-slot:item.actions="{ item }">
@@ -122,7 +131,9 @@
             </v-icon>
         </template>
     </v-data-table>
+    </div>
 </template>
+
 
 <script>
     import items_api from "../../api/items_api";
@@ -137,13 +148,7 @@
 
             dialog: false,
             headers: [
-                {text: 'Наименование', align: 'start', sortable: false, value: 'title',},
-                {text: 'url адресс', value: 'src'},
-                // { text: 'Фамилия', value: 'surname' },
-                // { text: 'Отчество', value: 'patronymic' },
-                // { text: 'Почта', value: 'email' },
-                // { text: 'Роль', value: 'role.name' },
-                // { text: 'Пароль', value: 'password' },
+                {text: 'Наименование', align: 'start', sortable: false, value: 'title'},
                 {text: 'Действия', value: 'actions', sortable: false},
                 {text: '', value: 'data-table-expand'},
             ],

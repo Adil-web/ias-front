@@ -3,9 +3,9 @@
 import axios from "axios";
 import authHeader from "./data-service";
 
-const GET_ITEMS='/api/test/menu_items';
-const EDIT_MENU_ITEM='/api/test/edit_menu_item';
-const CREATE_MENU_ITEM='/api/test/add_menu_item';
+const GET_ITEMS='/api/menu_item/menu_items';
+const EDIT_MENU_ITEM='/api/menu_item/edit_menu_item';
+const CREATE_MENU_ITEM='/api/menu_item/add_menu_item';
 
 
 

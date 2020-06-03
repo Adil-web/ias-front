@@ -12,7 +12,7 @@
                 </div>
                 <div class="monthDays" role="rowgroup">
                     <div v-for="(value, name) in daysByWeeks" :key="name" class="daysRowInMonth" role="row" >
-                        <span v-for="day in value" :key="day" class="oneDayInMonth" role="gridcell">
+                        <span v-for="(day, index) in value" :key="index" class="oneDayInMonth" role="gridcell">
                             <div @click.stop="toggleDay(day)" class="oneDayInMonthContent" v-bind:class="{ 'otherDay': day.isOtherMonth}">
                                 {{day.day}}
                             </div>

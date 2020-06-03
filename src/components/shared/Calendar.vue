@@ -207,7 +207,7 @@
     import dayjs from 'dayjs'
     import MonthCalendar from "./MonthCalendar";
     import Vue from 'vue'
-    import user_api from "@/api/user_api";
+    import event_api from "@/api/event_api";
     import file_api from "@/api/file_api";
 
     export default {
@@ -314,7 +314,7 @@
 
             saveEvent () {
                 if(this.event.id){
-                    user_api.editEventApi(this.event)
+                    event_api.editEventApi(this.event)
                         .then( rs =>{
                             Vue.set(this.events, this.events.findIndex(item=>item.id === rs.data.id), rs.data );
                             if(this.files.length > 0){
@@ -326,7 +326,7 @@
                         });
                 }
                 else{
-                    user_api.addEventApi(this.event)
+                    event_api.addEventApi(this.event)
                         .then(rs => {
                             this.events.push(rs.data);
                             if(this.files.length > 0){
@@ -350,7 +350,7 @@
             },
 
             getEvents () {
-                user_api.get_eventsApi().then((res)=>{
+                event_api.get_eventsApi().then((res)=>{
                     this.events = res.data;
                     console.log(this.events)
                 });

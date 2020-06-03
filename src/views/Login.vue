@@ -7,6 +7,14 @@
                     class="login-bg"
             ></v-img>
             <v-layout align-center justify-center>
+                <div v-if="electronCard">
+                    <v-dialog v-model="electronCard" persistent max-width="600px">
+                        <sign-component
+                                v-on:close-electron-card="electronCard=!electronCard"
+                                v-on:sign_result="getSignResult"
+                        ></sign-component>
+                    </v-dialog>
+                </div>
                 <div style="max-width: 500px; margin: 0 auto;" xs12>
                     <v-card tile style="background-color: rgba(255,255,255,0.7); border-radius: 25px" class="pt-5" >
                         <v-img
@@ -35,6 +43,7 @@
                         <v-card-actions class="pb-5">
                             <v-btn rounded block color="blue accent-2" v-on:click="submit" >Войти</v-btn>
                         </v-card-actions>
+<!--                        <span style="color:#005bd1; cursor: pointer; margin-left: 30%;" @click="ecpLogin">Войти с помощью ЭЦП </span>-->
                         <v-alert v-if="errorMessage" dense type="error">{{errorMessage}}</v-alert>
                     </v-card>
                 </div>
@@ -46,9 +55,13 @@
 
 <script>
     import {mapMutations} from "vuex";
+    import SignComponent from "./SignComponent";
+    import common_api from "../api/common_api";
+
 
     export default {
         name: "Login",
+        components:{ SignComponent },
         data:()=>({
             username:'',
             password:'',
@@ -56,7 +69,9 @@
             rolesRoutes: {
                 'ROLE_USER': '/main/home',
                 'ROLE_ADMIN':'/admin/users'
-            }
+            },
+            electronCard:false,
+            signedData:null
         }),
 
         methods:{
@@ -67,8 +82,6 @@
                     }).catch(er=>{
                     this.errorMessage=er.response.data.message;
                 })
-
-
             },
 
             routeTo(route){
@@ -77,11 +90,27 @@
             },
 
             ...mapMutations([
-                'logoutMutation'
+                'logoutMutation',
+                'loginSuccessMutation'
             ]),
 
             logout(){
                 this.logoutMutation();
+            },
+
+            login(user){
+                this.loginSuccessMutation(user);
+            },
+
+            ecpLogin(){
+                this.electronCard=true;
+            },
+
+            getSignResult(resultFromEvent){
+                common_api.loginByEcp(resultFromEvent).then(rs=>{
+                    this.login(rs.data)
+                    this.routeTo(this.rolesRoutes[this.user.role.name]);
+                })
             },
         },
 

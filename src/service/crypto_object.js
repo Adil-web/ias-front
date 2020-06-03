@@ -33,9 +33,9 @@ function blockScreen() {
 }
 
 function openDialog() {
-    if (confirm("Ошибка при подключений к прослойке. Убедитесь что программа запущена и нажмите ОК") === true) {
-        location.reload();
-    }
+    // if (confirm("Ошибка при подключений к прослойке. Убедитесь что программа запущена и нажмите ОК") === true) {
+    //     location.reload();
+    // }
 }
 
 function unBlockScreen() {
@@ -333,5 +333,6 @@ function getHash(data, digestAlgName, callBack) {
 export default {
     browseKeyStore,
     getKeys,
-    createCMSSignature
+    createCMSSignature,
+    getSubjectDN
 }

@@ -4,7 +4,6 @@ export const loginAction= ({commit},user)=>{
     return new Promise((resolve, reject) => {
         common_api.login(user)
             .then(response=>{
-                console.log(response)
                 if(response.data.id && response.data.token){
                     commit('loginSuccessMutation',response.data)
                     resolve(response);

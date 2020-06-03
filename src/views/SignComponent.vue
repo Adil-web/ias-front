@@ -2,7 +2,7 @@
     <div>
         <v-card flat>
             <v-card-title>
-                <div class="headline">Подпись по ЭЦП</div>
+                <div class="headline">Вход по ЭЦП</div>
             </v-card-title>
             <v-divider></v-divider>
             <v-form ref="electronForm" class="pr-2 pl-2">
@@ -34,8 +34,8 @@
 
                     <v-btn :disabled="!( storageAlias && password && storagePath && alias )"
                            color="primary"
-                           @click="createCMSSignatureCall">
-                        Подписать
+                           @click="getSubjectDN">
+                        Войти
                     </v-btn>
 
                 </v-container>
@@ -63,7 +63,8 @@
                 storagePath:null,
                 password:null,
                 ecpOwnerName:null,
-                alias:null
+                alias:null,
+                iin: null
 
             }
         },
@@ -104,7 +105,6 @@
 
             fillKeysBack(result){
                 if (result['errorCode'] === "NONE") {
-
                     let res = result.getResult();
                     this.ecpOwnerName = res.split("|")[1];
                     this.alias =res.split("|")[3];
@@ -124,6 +124,22 @@
             createCMSSignatureBack(result){
                 this.$emit('sign_result',result)
             },
+
+            getSubjectDN(){
+                crypto_api.getSubjectDN(this.storageAlias, this.storagePath, this.alias, this.password, this.getSubjectDNBack);
+            },
+
+            getSubjectDNBack(result){
+                if (result['errorCode'] === "NONE") {
+                    let res = result.getResult();
+                    this.iin = res.split(",")[2].substr(16);
+                    this.$emit('sign_result',this.iin)
+                }
+                else{
+                    alert(result.errorCode)
+                }
+
+            }
 
         }
 

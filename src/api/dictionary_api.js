@@ -1,12 +1,12 @@
 import axios from 'axios';
 import authHeader from "./data-service";
-const GET_WORDS = '/api/auth/words';
-const CHANGE_DICTIONARY = '/api/test/update_dictionary'
+const GET_DICTIONARY = '/api/dictionary/words';
+const CHANGE_DICTIONARY = '/api/dictionary/update_dictionary';
 export default {
 
 
     getWordsApi(){
-        return axios.get(GET_WORDS)
+        return axios.get(GET_DICTIONARY)
     },
 
     changeDictionary(words){

@@ -21,7 +21,7 @@
                 <v-spacer></v-spacer>
                 <v-dialog v-model="dialog" max-width="500px">
                     <template v-slot:activator="{ on }">
-                        <v-btn color="primary" dark class="mb-2" v-on="on">Новая пользователь</v-btn>
+                        <v-btn color="primary" dark class="mb-2" v-on="on">Новый пользователь</v-btn>
                     </template>
                     <v-card>
                         <v-card-title>
@@ -38,6 +38,10 @@
                                                 persistent-hint
                                                 required
                                         ></v-text-field>
+                                    </v-col>
+
+                                    <v-col cols="12" sm="6" md="4">
+                                        <v-text-field v-model="user.email" label="Email*" required></v-text-field>
                                     </v-col>
                                     <v-col cols="12" sm="6" md="4">
                                         <v-text-field
@@ -61,7 +65,10 @@
                                         ></v-text-field>
                                     </v-col>
                                     <v-col cols="12" sm="6" md="4">
-                                        <v-text-field v-model="user.email" label="Email*" required></v-text-field>
+                                        <v-text-field
+                                                v-model="user.iin"
+                                                label="Legal iin*"
+                                        ></v-text-field>
                                     </v-col>
                                     <v-col cols="12">
                                         <v-text-field v-model="user.password" label="Password*" type="password" required></v-text-field>
@@ -197,7 +204,6 @@
 
             save () {
                 if (this.user.id === undefined) {
-                    console.log(this.user)
                     user_api.createUserApi(this.user).then((response)=>{
                         this.users.push(response.data);
                         this.close();
