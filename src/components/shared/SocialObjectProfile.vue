@@ -112,9 +112,9 @@
 </template>
 
 <script>
-    import category_api from "../../api/category_api";
-    import source_api from "../../api/source_api";
-    import region_api from "../../api/region_api";
+    import category_api from "../../api/map_api";
+    import source_api from "../../api/map_api";
+    import region_api from "../../api/map_api";
 
 
 

@@ -1,7 +1,7 @@
 import axios from "axios";
 import authHeader from "./data-service";
 
-const GET_SOCIAL_OBJECTS='/api/test/social_objects';
+const GET_SOCIAL_OBJECTS='/api/map/social_objects';
 
 
 export default {

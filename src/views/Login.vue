@@ -43,7 +43,7 @@
                         <v-card-actions class="pb-5">
                             <v-btn rounded block color="blue accent-2" v-on:click="submit" >Войти</v-btn>
                         </v-card-actions>
-<!--                        <span style="color:#005bd1; cursor: pointer; margin-left: 30%;" @click="ecpLogin">Войти с помощью ЭЦП </span>-->
+                        <span style="color:#005bd1; cursor: pointer; margin-left: 30%;" @click="ecpLogin">Войти с помощью ЭЦП </span>
                         <v-alert v-if="errorMessage" dense type="error">{{errorMessage}}</v-alert>
                     </v-card>
                 </div>
