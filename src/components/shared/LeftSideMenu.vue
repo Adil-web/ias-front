@@ -101,46 +101,46 @@
                         src: ''
                     },
                     {
-                        isPowerBI: true,
+                        isPowerBI: false,
                         icon: ' mdi-av-timer',
                         text: 'Стратегическое управление',
                         path: 'bi',
-                        src: 'https://app.powerbi.com/view?r=eyJrIjoiNzcxNWJjNzUtOTUyMS00ZTg2LTllMzYtNDdjN2ZkNzQ4ZjBlIiwidCI6IjU1MDhkZmUzLWYwYWYtNGEyOS1hMjljLTY5N2JhYjIzNDRjNiIsImMiOjl9'
+                        src: ''
                     },
                     {
-                        isPowerBI: true,
+                        isPowerBI: false,
                         icon: 'mdi-chart-areaspline',
                         text: 'Мониторинг социально-экономического развития',
                         path: 'bi',
-                        src: 'https://app.powerbi.com/view?r=eyJrIjoiNTdjODUyMDItOTczNi00N2ZmLTk1YzktNDg0Nzk5MDQxYTUxIiwidCI6IjU1MDhkZmUzLWYwYWYtNGEyOS1hMjljLTY5N2JhYjIzNDRjNiIsImMiOjl9'
+                        src: ''
                     },
                     {
-                        isPowerBI: true,
+                        isPowerBI: false,
                         icon: 'mdi-currency-kzt',
                         text: 'Бюджет',
                         path: 'bi',
-                        src: 'https://app.powerbi.com/view?r=eyJrIjoiMDI4MjAzMWMtNTJlYy00NzI3LTlkZmUtZjc2NDIwNTdkNWI0IiwidCI6IjU1MDhkZmUzLWYwYWYtNGEyOS1hMjljLTY5N2JhYjIzNDRjNiIsImMiOjl9'
+                        src: ''
                     },
                     {
-                        isPowerBI: true,
+                        isPowerBI: false,
                         icon: 'mdi-wan',
                         text: 'Прогноз ВРП',
                         path: 'bi',
-                        src: 'https://app.powerbi.com/view?r=eyJrIjoiZGNkNDA4MDUtNDRkNC00YmYzLTg0NGQtOGYxNGI4NmU3YWE5IiwidCI6IjU1MDhkZmUzLWYwYWYtNGEyOS1hMjljLTY5N2JhYjIzNDRjNiIsImMiOjl9'
+                        src: ''
                     },
                     {
-                        isPowerBI: true,
+                        isPowerBI: false,
                         icon: 'mdi-offer',
                         text: 'Бюджетные инвестиционные проекты',
                         path: 'bi',
-                        src: 'https://app.powerbi.com/view?r=eyJrIjoiYTkyY2E5NjktODJiZi00YmRmLWEwMzUtMTMzY2Q2MzFjZjY0IiwidCI6IjU1MDhkZmUzLWYwYWYtNGEyOS1hMjljLTY5N2JhYjIzNDRjNiIsImMiOjl9'
+                        src: ''
                     },
                     {
-                        isPowerBI: true,
+                        isPowerBI: false,
                         icon: 'mdi-school-outline',
                         text: 'С дипломом в село',
                         path: 'bi',
-                        src: 'https://app.powerbi.com/view?r=eyJrIjoiNWM3OTg3NTMtZTYzMS00NmQwLWI1OWQtN2FkOThlYzA3YzcyIiwidCI6IjU1MDhkZmUzLWYwYWYtNGEyOS1hMjljLTY5N2JhYjIzNDRjNiIsImMiOjl9'
+                        src: ''
                     },
                     {
                         isPowerBI: false,
@@ -158,11 +158,11 @@
 
                     },
                     {
-                        isPowerBI: true,
+                        isPowerBI: false,
                         icon: 'mdi-apps',
                         text: 'Цифровые социальные объекты',
                         path: 'bi',
-                        src: 'https://app.powerbi.com/view?r=eyJrIjoiYzZiZWMzM2MtOGQ5ZS00M2EzLWExZTQtNjkwNTczYmYyNGExIiwidCI6IjU1MDhkZmUzLWYwYWYtNGEyOS1hMjljLTY5N2JhYjIzNDRjNiIsImMiOjl9'
+                        src: ''
 
                     },
                     {
@@ -177,12 +177,12 @@
                         icon: 'mdi-heart-pulse',
                         text: 'Здравоохранение',
                         path: 'bi',
-                        isPowerBI: true,
-                        src: 'https://app.powerbi.com/view?r=eyJrIjoiMGQyZjczOGMtMmZkMi00MjA0LTkzZjktMDFiZTQwMGQ1YjdhIiwidCI6IjU1MDhkZmUzLWYwYWYtNGEyOS1hMjljLTY5N2JhYjIzNDRjNiIsImMiOjl9'
+                        isPowerBI: false,
+                        src: ''
                     },
                     {
                         icon: 'mdi-school',
-                        text: 'Образование',
+                        text: 'Образованиееееее',
                         path: '',
                         isPowerBI: false,
                         src: '',
@@ -191,24 +191,24 @@
                                 icon: 'mdi-cast-education',
                                 text: 'Образование',
                                 path: 'bi',
-                                isPowerBI: true,
-                                src: 'https://app.powerbi.com/view?r=eyJrIjoiY2I5NWZiZDYtYTNlMS00ZWFmLTkwYjktODdjYmE1ZDY5YzEzIiwidCI6IjU1MDhkZmUzLWYwYWYtNGEyOS1hMjljLTY5N2JhYjIzNDRjNiIsImMiOjl9'
+                                isPowerBI: false,
+                                src: ''
                             },
                             {
                                 icon: 'mdi-chart-bar',
                                 text: 'Оценка состояния образования',
                                 path: 'bi',
-                                isPowerBI: true,
-                                src: 'https://app.powerbi.com/view?r=eyJrIjoiMTMxOWI5NzktZTNhMi00MWQwLWEzMjAtNjNmODRjZjZkZGEyIiwidCI6IjU1MDhkZmUzLWYwYWYtNGEyOS1hMjljLTY5N2JhYjIzNDRjNiIsImMiOjl9'
+                                isPowerBI: false,
+                                src: ''
                             },
                         ]
                     },
                     {
-                        isPowerBI: true,
+                        isPowerBI: false,
                         icon: 'mdi-message-processing',
                         text: 'Координация занятости и социальная защита',
                         path: 'bi',
-                        src: 'https://app.powerbi.com/view?r=eyJrIjoiYjMyM2UzMmYtODExOS00MjA1LTlhOTQtZGNhYjc0YzIxMmRkIiwidCI6IjU1MDhkZmUzLWYwYWYtNGEyOS1hMjljLTY5N2JhYjIzNDRjNiIsImMiOjl9'
+                        src: ''
                     },
                     {
                         isPowerBI: false,
@@ -251,6 +251,7 @@
         created() {
             items_api.getMenuItems().then(rs=>{
                 this.items = rs.data;
+                this.items.map((e, i) => console.log(e))
             })
         }
 

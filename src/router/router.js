@@ -7,11 +7,6 @@ import Organizations from '@/components/admin/Organizations';
 import PowerBI from "../components/powerbi/PowerBi";
 import CustomComponent from "../components/powerbi/CustomComponent";
 
-
-
-
-
-
 import Vue from 'vue';
 import MainLayout from '@/components/shared/MainLayout';
 import Calendar from '@/components/shared/Calendar';
@@ -19,6 +14,8 @@ import AdminLayout from "@/components/admin/AdminLayout";
 import MenuItems from "../components/admin/MenuItems";
 import Dictionary from "../components/admin/Dictionary";
 import Chart from "../components/admin/Chart";
+
+import myChart from "../components/charts/Chart"
 
 Vue.use(VueRouter);
 
@@ -43,6 +40,9 @@ const router =  new VueRouter({
                 {
                     path: 'calendar', name: 'calendar', component: Calendar
                 },
+                {
+                    path: 'zdrav', name: 'zdrav', component: myChart,
+                }
 
 
 
