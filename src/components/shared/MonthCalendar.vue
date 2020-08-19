@@ -61,7 +61,7 @@
         methods:{
 
             toggleDay(day){
-                this.$emit('day', { day: day, month: this.month , year: this.year })
+                this.$emit('day', { day: day, month: this.month, year: this.year })
             },
             showDayTitle (day) {
                 return this.dayMapping.ru[day]
